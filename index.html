@@ -498,27 +498,31 @@
 
                     <div class="contact-grid">
                         
-                        <!-- Terminal Form -->
-                        <form id="contact-form" class="terminal-form" action="mailto:bharathjai2005@gmail.com" method="POST" enctype="text/plain">
+                        <!-- Terminal Form (Powered by Web3Forms for direct Gmail delivery) -->
+                        <form id="contact-form" class="terminal-form" action="https://api.web3forms.com/submit" method="POST">
+                            <input type="hidden" name="access_key" id="web3forms-access-key" value="YOUR_ACCESS_KEY_HERE">
+                            <input type="hidden" name="subject" value="[PORTFOLIO TRANSMISSION] New Message from Visitor">
+                            <input type="hidden" name="from_name" value="Bharath Portfolio Terminal">
+
                             <div class="form-group">
                                 <label for="form-name" class="form-label">
                                     <span class="prompt-user">bharath@terminal</span>:~$ enter --name:
                                 </label>
-                                <input type="text" id="form-name" class="terminal-input" placeholder="[Your Name / Recruiter Name]" required>
+                                <input type="text" id="form-name" name="name" class="terminal-input" placeholder="[Your Name / Recruiter Name]" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="form-email" class="form-label">
                                     <span class="prompt-user">bharath@terminal</span>:~$ enter --email:
                                 </label>
-                                <input type="email" id="form-email" class="terminal-input" placeholder="[user@domain.com]" required>
+                                <input type="email" id="form-email" name="email" class="terminal-input" placeholder="[user@domain.com]" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="form-message" class="form-label">
                                     <span class="prompt-user">bharath@terminal</span>:~$ enter --message:
                                 </label>
-                                <textarea id="form-message" class="terminal-textarea" rows="4" placeholder="[Type your transmission message here...]" required></textarea>
+                                <textarea id="form-message" name="message" class="terminal-textarea" rows="4" placeholder="[Type your transmission message here...]" required></textarea>
                             </div>
 
                             <button type="submit" class="btn-box glow-btn submit-btn" id="submit-btn">

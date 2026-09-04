@@ -784,7 +784,7 @@ function initContactForm() {
 
     if (!form || !feedback) return;
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const name = document.getElementById('form-name')?.value;
@@ -805,39 +805,40 @@ function initContactForm() {
         feedback.innerHTML = `
             <div>> INITIATING ENCRYPTED CONNECTION TO HOST...</div>
             <div>> TARGET ENDPOINT: <span class="text-highlight">${targetEmail}</span></div>
-            <div>> PACKAGING PAYLOAD FROM: ${escapeHTML(email)}...</div>
+            <div>> PACKAGING PACKET PAYLOAD FROM: ${escapeHTML(email)}...</div>
         `;
 
-        // Attempt Web3Forms / Formspree API Submission
-        fetch('https://api.web3forms.com/submit', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                access_key: 'b6f6f1c4-1111-4444-8888-999999999999', // Public key or fallback
-                name: name,
-                email: email,
-                message: message,
-                subject: mailSubject
-            })
-        }).catch(() => {
-            // Silently fallback to mailto if external endpoint is offline
-        });
+        try {
+            const formData = new FormData(form);
+            const response = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData
+            });
 
-        setTimeout(() => {
-            feedback.innerHTML += `<div>> DISPATCHING MAIL CLIENT PAYLOAD TO <span class="text-accent">${targetEmail}</span>...</div>`;
-            feedback.innerHTML += `<div class="text-accent">> STATUS: 200 OK — TRANSMISSION DELIVERED! THANK YOU ${escapeHTML(name).toUpperCase()}.</div>`;
+            const result = await response.json();
 
-            // Open mailto fallback so the visitor's mail application sends directly to bharathjai2005@gmail.com
+            if (result.success) {
+                feedback.innerHTML += `<div class="text-accent">> STATUS: 200 OK — TRANSMISSION DELIVERED DIRECTLY TO GMAIL INBOX (${targetEmail})!</div>`;
+                feedback.innerHTML += `<div class="text-accent">> Thank you ${escapeHTML(name)}. I will respond shortly.</div>`;
+                form.reset();
+            } else {
+                // If access key is placeholder, trigger direct mailto dispatch
+                feedback.innerHTML += `<div>> DISPATCHING MAIL CLIENT FALLBACK TO <span class="text-accent">${targetEmail}</span>...</div>`;
+                feedback.innerHTML += `<div class="text-accent">> STATUS: 200 OK — TRANSMISSION DISPATCHED TO BHARATH JAYAKUMAR!</div>`;
+                const mailtoUri = `mailto:${targetEmail}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
+                window.location.href = mailtoUri;
+                form.reset();
+            }
+        } catch (err) {
+            feedback.innerHTML += `<div>> DISPATCHING MAIL CLIENT FALLBACK TO <span class="text-accent">${targetEmail}</span>...</div>`;
+            feedback.innerHTML += `<div class="text-accent">> STATUS: 200 OK — TRANSMISSION DISPATCHED TO BHARATH JAYAKUMAR!</div>`;
             const mailtoUri = `mailto:${targetEmail}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
             window.location.href = mailtoUri;
-
+            form.reset();
+        } finally {
             submitBtn.disabled = false;
             submitBtn.textContent = '[> SEND_TRANSMISSION]';
-            form.reset();
-        }, 1200);
+        }
     });
 }
 
