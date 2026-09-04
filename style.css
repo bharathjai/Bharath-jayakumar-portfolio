@@ -539,30 +539,54 @@ h1, h2, h3, h4, h5, h6 {
 
 .avatar-box {
     border: 1px solid var(--neon-yellow);
-    background-color: #000;
+    background-color: #000000;
     padding: 0.9rem;
-    box-shadow: var(--box-shadow-glow);
+    box-shadow: 0 0 12px var(--neon-yellow-glow);
     display: flex;
     flex-direction: column;
     align-items: center;
+    border-radius: 4px;
+    transition: all var(--transition-normal);
+}
+
+.avatar-box:hover {
+    border-color: var(--neon-yellow-bright);
+    box-shadow: 0 0 22px var(--neon-yellow-glow), inset 0 0 10px rgba(255, 230, 0, 0.15);
 }
 
 .photo-frame {
-    width: 210px;
-    height: 210px;
+    width: 220px;
+    height: 260px;
     border: 1px solid var(--neon-yellow-dim);
     background-color: #050502;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    border-radius: 2px;
 }
 
 .photo-frame img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: top center;
     display: block;
+    filter: sepia(0.35) hue-rotate(5deg) contrast(1.1) brightness(0.92);
+    transition: filter var(--transition-normal), transform var(--transition-normal);
+}
+
+.avatar-box:hover .photo-frame img {
+    filter: sepia(0.12) hue-rotate(0deg) contrast(1.05) brightness(1.0);
+    transform: scale(1.03);
+}
+
+.photo-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(255, 230, 0, 0.08) 0%, rgba(0, 0, 0, 0.25) 100%);
+    pointer-events: none;
 }
 
 .avatar-caption {
