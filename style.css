@@ -729,6 +729,24 @@ h1, h2, h3, h4, h5, h6 {
     background: rgba(255, 230, 0, 0.08);
 }
 
+/* Distinct Achievement / Award Badges */
+.award-tag, .award-badge {
+    font-size: 0.76rem;
+    color: var(--accent-green);
+    border: 1px dashed var(--accent-green);
+    padding: 0.15rem 0.5rem;
+    background: rgba(0, 255, 102, 0.12);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 8px rgba(0, 255, 102, 0.2);
+    transition: var(--transition-fast);
+}
+.award-tag:hover, .award-badge:hover {
+    background: var(--accent-green);
+    color: #000000;
+    box-shadow: 0 0 14px var(--accent-green);
+}
+
 .project-links {
     display: flex;
     gap: 0.6rem;
