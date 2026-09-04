@@ -795,41 +795,57 @@ function initContactForm() {
 
         const targetEmail = 'bharathjai2005@gmail.com';
         const mailSubject = `[PORTFOLIO TRANSMISSION] Message from ${name}`;
-        const mailBody = `Name: ${name}\nSender Email: ${email}\n\nMessage:\n${message}\n\n---\nSent via Terminal Portfolio`;
+        const mailBody = `Name: ${name}\nSender Email: ${email}\n\nMessage:\n${message}\n\n---\nSent via Terminal Portfolio Server`;
 
         // Terminal animation sequence
         submitBtn.disabled = true;
-        submitBtn.textContent = '[> TRANSMITTING_PAYLOAD...]';
+        submitBtn.textContent = '[> TRANSMITTING_TO_SERVER...]';
 
         feedback.hidden = false;
         feedback.innerHTML = `
-            <div>> INITIATING ENCRYPTED CONNECTION TO HOST...</div>
-            <div>> TARGET ENDPOINT: <span class="text-highlight">${targetEmail}</span></div>
-            <div>> PACKAGING PACKET PAYLOAD FROM: ${escapeHTML(email)}...</div>
+            <div>> INITIATING ENCRYPTED CONNECTION TO BACKEND SERVER...</div>
+            <div>> TARGET API ENDPOINT: <span class="text-highlight">/api/contact</span> (${targetEmail})</div>
+            <div>> DISPATCHING PACKET PAYLOAD FROM: ${escapeHTML(email)}...</div>
         `;
 
         try {
-            const formData = new FormData(form);
-            const response = await fetch('https://api.web3forms.com/submit', {
+            // 1. Try Backend Node.js / Express Server API
+            const serverResponse = await fetch('/api/contact', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, email, message })
             });
 
-            const result = await response.json();
-
-            if (result.success) {
-                feedback.innerHTML += `<div class="text-accent">> STATUS: 200 OK — TRANSMISSION DELIVERED DIRECTLY TO GMAIL INBOX (${targetEmail})!</div>`;
-                feedback.innerHTML += `<div class="text-accent">> Thank you ${escapeHTML(name)}. I will respond shortly.</div>`;
+            if (serverResponse.ok) {
+                const serverResult = await serverResponse.json();
+                feedback.innerHTML += `<div class="text-accent">> STATUS: 200 OK — TRANSMISSION RECEIVED & PROCESSED BY SERVER API!</div>`;
+                feedback.innerHTML += `<div class="text-accent">> Thank you ${escapeHTML(name)}. Your message has been sent to ${targetEmail}.</div>`;
                 form.reset();
-            } else {
-                // If access key is placeholder, trigger direct mailto dispatch
-                feedback.innerHTML += `<div>> DISPATCHING MAIL CLIENT FALLBACK TO <span class="text-accent">${targetEmail}</span>...</div>`;
-                feedback.innerHTML += `<div class="text-accent">> STATUS: 200 OK — TRANSMISSION DISPATCHED TO BHARATH JAYAKUMAR!</div>`;
-                const mailtoUri = `mailto:${targetEmail}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
-                window.location.href = mailtoUri;
-                form.reset();
+                return;
             }
+            throw new Error('Server endpoint unavailable');
         } catch (err) {
+            // 2. Fallback to Web3Forms / mailto client dispatch
+            try {
+                const formData = new FormData(form);
+                const web3Response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+                const web3Result = await web3Response.json();
+
+                if (web3Result.success) {
+                    feedback.innerHTML += `<div class="text-accent">> STATUS: 200 OK — TRANSMISSION DELIVERED DIRECTLY TO GMAIL INBOX (${targetEmail})!</div>`;
+                    feedback.innerHTML += `<div class="text-accent">> Thank you ${escapeHTML(name)}. I will respond shortly.</div>`;
+                    form.reset();
+                    return;
+                }
+            } catch (wErr) {
+                // Ignore web3 error and proceed to mailto fallback
+            }
+
             feedback.innerHTML += `<div>> DISPATCHING MAIL CLIENT FALLBACK TO <span class="text-accent">${targetEmail}</span>...</div>`;
             feedback.innerHTML += `<div class="text-accent">> STATUS: 200 OK — TRANSMISSION DISPATCHED TO BHARATH JAYAKUMAR!</div>`;
             const mailtoUri = `mailto:${targetEmail}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
