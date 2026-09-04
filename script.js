@@ -4,6 +4,10 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     initBgCanvas();
+    initAnimatedBootSequence();
+    init3DAsciiCube();
+    initDraggableWindows();
+    initWindowControlDots();
     initTypewriterObserver();
     initNavigation();
     initFilters();
@@ -106,7 +110,272 @@ function initBgCanvas() {
 }
 
 /* ==========================================================================
-   2. TYPEWRITER ANIMATION (SCROLL-TRIGGERED)
+   2. ANIMATED BOOT SEQUENCE (TYPING EFFECT ON LOAD)
+   ========================================================================== */
+function initAnimatedBootSequence() {
+    const bootContainer = document.getElementById('boot-log');
+    if (!bootContainer) return;
+
+    const bootMessages = [
+        "> INITIALIZING CORE ARCHITECTURE...",
+        "> LOADING USER PROFILE: BHARATH JAYAKUMAR...",
+        "> MOUNTING CYBER SECURITY & FULL-STACK MODULES...",
+        "> CONNECTING MERN & QUANTITATIVE ALGO ENGINES...",
+        "> STATUS: BHARATH_PROFILE_ONLINE [SYSTEM READY]"
+    ];
+
+    bootContainer.innerHTML = '';
+    let msgIndex = 0;
+
+    function typeNextLine() {
+        if (msgIndex >= bootMessages.length) return;
+
+        const lineText = bootMessages[msgIndex];
+        const lineDiv = document.createElement('div');
+        lineDiv.className = 'log-line' + (msgIndex === bootMessages.length - 1 ? ' highlight-line' : '');
+        bootContainer.appendChild(lineDiv);
+
+        let charIndex = 0;
+        const charInterval = setInterval(() => {
+            if (charIndex <= lineText.length) {
+                lineDiv.textContent = lineText.substring(0, charIndex) + (charIndex < lineText.length ? '█' : ' [OK]');
+                charIndex++;
+                bootContainer.scrollTop = bootContainer.scrollHeight;
+            } else {
+                clearInterval(charInterval);
+                msgIndex++;
+                setTimeout(typeNextLine, 180);
+            }
+        }, 22);
+    }
+
+    setTimeout(typeNextLine, 200);
+}
+
+/* ==========================================================================
+   3. 3D INTERACTIVE SPINNING ASCII WIREFRAME CUBE ENGINE
+   ========================================================================== */
+function init3DAsciiCube() {
+    const pre = document.getElementById('ascii-cube-pre');
+    if (!pre) return;
+
+    let A = 0;
+    let B = 0;
+
+    const width = 44;
+    const height = 20;
+
+    function renderFrame() {
+        let zBuffer = new Array(width * height).fill(0);
+        let buffer = new Array(width * height).fill(' ');
+
+        // Cube coordinates rendering
+        for (let x = -10; x < 10; x += 1.2) {
+            for (let y = -10; y < 10; y += 1.2) {
+                for (let z = -10; z < 10; z += 1.2) {
+                    // Only render points on the outer faces of the cube
+                    if (Math.abs(x) < 9 && Math.abs(y) < 9 && Math.abs(z) < 9) continue;
+
+                    // Rotate 3D points
+                    let cosA = Math.cos(A), sinA = Math.sin(A);
+                    let cosB = Math.cos(B), sinB = Math.sin(B);
+
+                    let x1 = x;
+                    let y1 = y * cosA - z * sinA;
+                    let z1 = y * sinA + z * cosA;
+
+                    let x2 = x1 * cosB + z1 * sinB;
+                    let y2 = y1;
+                    let z2 = -x1 * sinB + z1 * cosB;
+
+                    let distance = 35;
+                    let ooz = 1 / (z2 + distance);
+
+                    let xp = Math.floor(width / 2 + x2 * ooz * 42);
+                    let yp = Math.floor(height / 2 + y2 * ooz * 22);
+
+                    let idx = xp + yp * width;
+
+                    if (xp >= 0 && xp < width && yp >= 0 && yp < height) {
+                        if (ooz > zBuffer[idx]) {
+                            zBuffer[idx] = ooz;
+                            // Luminance chars for retro phosphor shading
+                            const chars = '.,-~:;=!*#$@';
+                            let luminanceIdx = Math.floor((z2 + 10) / 20 * (chars.length - 1));
+                            luminanceIdx = Math.max(0, Math.min(chars.length - 1, luminanceIdx));
+                            buffer[idx] = chars[luminanceIdx];
+                        }
+                    }
+                }
+            }
+        }
+
+        let outputStr = '';
+        for (let i = 0; i < height; i++) {
+            outputStr += buffer.slice(i * width, (i + 1) * width).join('') + '\n';
+        }
+
+        pre.textContent = outputStr;
+        A += 0.03;
+        B += 0.02;
+    }
+
+    let cubeInterval = setInterval(renderFrame, 45);
+
+    // Pause cube animation when tab is invisible
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            clearInterval(cubeInterval);
+        } else {
+            cubeInterval = setInterval(renderFrame, 45);
+        }
+    });
+}
+
+/* ==========================================================================
+   4. DRAGGABLE WINDOW PANELS
+   ========================================================================== */
+function initDraggableWindows() {
+    const headers = document.querySelectorAll('.terminal-box .box-header');
+
+    headers.forEach(header => {
+        const box = header.closest('.terminal-box');
+        if (!box) return;
+
+        let isDragging = false;
+        let startX, startY, initialLeft, initialTop;
+
+        header.style.cursor = 'grab';
+
+        header.addEventListener('mousedown', (e) => {
+            // Ignore click if clicking on control dot buttons
+            if (e.target.classList.contains('control-dot')) return;
+
+            isDragging = true;
+            header.style.cursor = 'grabbing';
+
+            const rect = box.getBoundingClientRect();
+            startX = e.clientX;
+            startY = e.clientY;
+
+            // Get computed positioning or set relative offsets
+            if (getComputedStyle(box).position === 'static') {
+                box.style.position = 'relative';
+            }
+
+            initialLeft = box.offsetLeft;
+            initialTop = box.offsetTop;
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        });
+
+        function onMouseMove(e) {
+            if (!isDragging) return;
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+
+            box.style.left = `${dx}px`;
+            box.style.top = `${dy}px`;
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            header.style.cursor = 'grab';
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+    });
+}
+
+/* ==========================================================================
+   5. WINDOW CONTROL DOTS (MINIMIZE / EXPAND / CLOSE)
+   ========================================================================== */
+function initWindowControlDots() {
+    const boxes = document.querySelectorAll('.terminal-box');
+
+    boxes.forEach(box => {
+        const dots = box.querySelectorAll('.control-dot');
+        const body = box.querySelector('.box-body');
+
+        if (dots.length >= 3 && body) {
+            // Dot 1 (Red): Hide/Close Window with smooth animation
+            dots[0].addEventListener('click', (e) => {
+                e.stopPropagation();
+                box.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                box.style.opacity = '0.15';
+                box.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    box.style.display = 'none';
+                    showRestoreBanner(box);
+                }, 300);
+            });
+
+            // Dot 2 (Yellow): Minimize/Collapse Window Body
+            dots[1].addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (body.style.display === 'none') {
+                    body.style.display = 'block';
+                } else {
+                    body.style.display = 'none';
+                }
+            });
+
+            // Dot 3 (Green): Toggle Window Highlight/Maximize
+            dots[2].addEventListener('click', (e) => {
+                e.stopPropagation();
+                box.classList.toggle('window-maximized');
+                if (box.classList.contains('window-maximized')) {
+                    box.style.borderColor = 'var(--neon-yellow-bright)';
+                    box.style.boxShadow = '0 0 30px var(--neon-yellow-glow)';
+                } else {
+                    box.style.borderColor = 'var(--neon-yellow)';
+                    box.style.boxShadow = '';
+                }
+            });
+        }
+    });
+}
+
+function showRestoreBanner(closedBox) {
+    let banner = document.getElementById('restore-banner');
+    if (!banner) {
+        banner = document.createElement('div');
+        banner.id = 'restore-banner';
+        banner.style.cssText = `
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            background: rgba(0,0,0,0.95);
+            border: 1px solid var(--neon-yellow);
+            padding: 0.6rem 1rem;
+            z-index: 800;
+            font-size: 0.85rem;
+            color: var(--neon-yellow);
+            box-shadow: 0 0 15px var(--neon-yellow-glow);
+        `;
+        document.body.appendChild(banner);
+    }
+
+    const boxTitle = closedBox.querySelector('.box-title')?.textContent || 'Terminal Window';
+    banner.innerHTML = `
+        [WINDOW CLOSED] '${boxTitle}' 
+        <button id="restore-btn" style="margin-left:10px; background:var(--neon-yellow); color:#000; border:none; padding:2px 8px; font-weight:bold; cursor:pointer;">
+            [RESTORE]
+        </button>
+    `;
+    banner.style.display = 'block';
+
+    document.getElementById('restore-btn').addEventListener('click', () => {
+        closedBox.style.display = 'block';
+        closedBox.style.opacity = '1';
+        closedBox.style.transform = 'none';
+        banner.style.display = 'none';
+    });
+}
+
+/* ==========================================================================
+   6. TYPEWRITER ANIMATION (SCROLL-TRIGGERED)
    ========================================================================== */
 function initTypewriterObserver() {
     const targets = document.querySelectorAll('.typewriter-target');
@@ -155,7 +424,7 @@ function startTyping(element) {
 }
 
 /* ==========================================================================
-   3. NAVIGATION, HAMBURGER & ACTIVE LINK HIGHLIGHTER
+   7. NAVIGATION, HAMBURGER & ACTIVE LINK HIGHLIGHTER
    ========================================================================== */
 function initNavigation() {
     const mobileToggle = document.getElementById('mobile-toggle');
@@ -202,7 +471,7 @@ function initNavigation() {
 }
 
 /* ==========================================================================
-   4. CATEGORY FILTERS (SKILLS & PROJECTS)
+   8. CATEGORY FILTERS (SKILLS & PROJECTS)
    ========================================================================== */
 function initFilters() {
     // Skills Filter
@@ -255,7 +524,7 @@ function initFilters() {
 }
 
 /* ==========================================================================
-   5. INTERACTIVE TERMINAL CLI MODAL ENGINE
+   9. INTERACTIVE TERMINAL CLI MODAL ENGINE (WITH THEME SWITCHER & EASTER EGGS)
    ========================================================================== */
 function initInteractiveCLI() {
     const cliModal = document.getElementById('cli-modal');
@@ -313,37 +582,70 @@ function initInteractiveCLI() {
 
     function executeCommand(cmdStr) {
         // Echo input command
-        printLine(`<span class="prompt-user">guest@terminal</span>:<span class="prompt-path">~</span>$&nbsp;${escapeHTML(cmdStr)}`);
+        printLine(`<span class="prompt-user">bharath@terminal</span>:<span class="prompt-path">~</span>$&nbsp;${escapeHTML(cmdStr)}`);
 
         const args = cmdStr.toLowerCase().split(' ').filter(Boolean);
         const command = args[0];
 
         switch (command) {
             case 'help':
-                printLine(`AVAILABLE COMMANDS:`);
-                printLine(`  <span class="text-highlight">about</span>      - Display user background & bio summary`);
-                printLine(`  <span class="text-highlight">skills</span>     - List core technical stack & competencies`);
-                printLine(`  <span class="text-highlight">projects</span>   - View featured software repositories`);
-                printLine(`  <span class="text-highlight">experience</span> - Show career chronology timeline`);
-                printLine(`  <span class="text-highlight">contact</span>    - Print communication endpoints`);
-                printLine(`  <span class="text-highlight">clear</span>      - Clear terminal screen history`);
-                printLine(`  <span class="text-highlight">date</span>       - Display system date and time`);
-                printLine(`  <span class="text-highlight">whoami</span>     - Output active user session info`);
-                printLine(`  <span class="text-highlight">sudo hire</span>  - Execute hiring authorization protocol`);
-                printLine(`  <span class="text-highlight">exit</span>       - Close terminal window session`);
+                printLine(`AVAILABLE SYSTEM COMMANDS:`);
+                printLine(`  <span class="text-highlight">about</span>            - Display user bio & background details`);
+                printLine(`  <span class="text-highlight">skills</span>           - List core technical stack & competencies`);
+                printLine(`  <span class="text-highlight">projects</span>         - View featured software & case studies`);
+                printLine(`  <span class="text-highlight">experience</span>       - Show career chronology timeline`);
+                printLine(`  <span class="text-highlight">contact</span>          - Print communication endpoints`);
+                printLine(`  <span class="text-highlight">theme &lt;name&gt;</span>     - Switch terminal palette (<span class="text-accent">green</span>, <span class="text-accent">amber</span>, <span class="text-accent">light</span>, <span class="text-accent">yellow</span>)`);
+                printLine(`  <span class="text-highlight">cat contact.txt</span>   - Download resume / trigger email link`);
+                printLine(`  <span class="text-highlight">clear</span>            - Clear terminal output history`);
+                printLine(`  <span class="text-highlight">date</span>             - Display system date & time`);
+                printLine(`  <span class="text-highlight">whoami</span>           - Output active session details`);
+                printLine(`  <span class="text-highlight">sudo hire</span>        - Execute hiring authorization protocol`);
+                printLine(`  <span class="text-highlight">exit</span>             - Close terminal window session`);
+                break;
+
+            case 'theme':
+                const themeName = args[1];
+                if (!themeName || themeName === 'yellow' || themeName === 'reset') {
+                    document.body.className = '';
+                    printLine(`[THEME] Switched to default Neon Yellow terminal theme.`);
+                } else if (themeName === 'green') {
+                    document.body.className = 'theme-green';
+                    printLine(`[THEME] Switched to Green CRT Matrix phosphor theme.`);
+                } else if (themeName === 'amber') {
+                    document.body.className = 'theme-amber';
+                    printLine(`[THEME] Switched to Amber Retro terminal theme.`);
+                } else if (themeName === 'light') {
+                    document.body.className = 'theme-light';
+                    printLine(`[THEME] Switched to High-Contrast Light hacker theme.`);
+                } else {
+                    printLine(`Unknown theme variant '${escapeHTML(themeName)}'. Options: <span class="text-highlight">green, amber, light, yellow</span>`);
+                }
+                break;
+
+            case 'cat':
+                if (args[1] === 'contact.txt' || args[1] === 'resume.txt' || args[1] === 'resume') {
+                    printLine(`> OPENING CONTACT TRANSMISSION & RESUME LINK...`);
+                    printLine(`Direct Mailto: <a href="mailto:bharathjai2005@gmail.com" class="ep-link">bharathjai2005@gmail.com</a>`);
+                    window.location.href = 'mailto:bharathjai2005@gmail.com';
+                } else {
+                    printLine(`USER PROFILE: BHARATH JAYAKUMAR`);
+                    printLine(`ROLE: Software Developer | Cyber Security | Full-Stack Development`);
+                    printLine(`BIO: Cyber Security graduate building MERN e-commerce platforms, MQL5 algo trading engines, and AI spyware classification systems.`);
+                    document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' });
+                }
                 break;
 
             case 'about':
-            case 'cat':
                 printLine(`USER PROFILE: BHARATH JAYAKUMAR`);
                 printLine(`ROLE: Software Developer | Cyber Security | Full-Stack Development`);
-                printLine(`BIO: Cyber Security graduate building MERN e-commerce platforms, AI-driven spyware detection, and secure RESTful services.`);
+                printLine(`BIO: Cyber Security graduate building MERN e-commerce platforms, MQL5 algo trading engines, and AI spyware classification systems.`);
                 document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' });
                 break;
 
             case 'skills':
                 printLine(`TECHNICAL SKILLS SUMMARY:`);
-                printLine(`  • Languages: Java, JavaScript, TypeScript, Python, SQL`);
+                printLine(`  • Languages: Java, JavaScript, TypeScript, Python, SQL, MQL5`);
                 printLine(`  • Web Stack: Node.js, Express, React.js, HTML5, CSS3, RESTful APIs`);
                 printLine(`  • Databases: MongoDB, MySQL`);
                 printLine(`  • Tools & Analytics: Git, GitHub, Firebase FCM, Postman, GA4, Microsoft Clarity`);
@@ -351,11 +653,13 @@ function initInteractiveCLI() {
                 break;
 
             case 'projects':
-                printLine(`FEATURED REPOSITORIES & DEPLOYMENTS:`);
+                printLine(`FEATURED REPOSITORIES & CASE STUDIES:`);
                 printLine(`  1. Namma Veetu Anjaraipetti [MERN E-Commerce Platform] (Live: https://nammaveetuanjaraipetti.online)`);
-                printLine(`  2. Spyware Detection Using AI & ML [Python / Flask / Supervised ML] (2nd Prize Expo)`);
-                printLine(`  3. Code in Borderland [Node.js / TypeScript] (100+ Participants Event Platform)`);
-                printLine(`  4. NextGen ATM — Multi-Bank Biometric Access [Python / OpenCV / ML]`);
+                printLine(`  2. Automated Algorithmic Trading EA [MQL5 & Python Quantitative Risk Script]`);
+                printLine(`  3. Spyware Detection Using AI & ML [Python / Flask / Supervised ML] (2nd Prize Expo)`);
+                printLine(`  4. AI Generative Brand & Media Pipeline [Python / Synthetic Visual Models]`);
+                printLine(`  5. Code in Borderland [Node.js / TypeScript] (100+ Participants Event Platform)`);
+                printLine(`  6. NextGen ATM — Multi-Bank Biometric Access [Python / OpenCV / ML]`);
                 document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' });
                 break;
 
@@ -424,7 +728,7 @@ function escapeHTML(str) {
 }
 
 /* ==========================================================================
-   6. PROJECT DETAILS MODAL
+   10. DETAILED PROJECT CASE STUDY MODALS
    ========================================================================== */
 function initProjectModals() {
     const projectModal = document.getElementById('project-modal');
@@ -435,58 +739,91 @@ function initProjectModals() {
 
     const projectData = {
         'project-1': {
-            path: '~/projects/namma-veetu-anjaraipetti',
-            title: '[Namma Veetu Anjaraipetti — E-Commerce]',
-            description: 'Full-stack MERN e-commerce platform built & deployed for a local spice business. Features Google authentication, guest checkout, MongoDB order workflows, and Firebase Cloud Messaging (FCM) for real-time order notifications.',
+            path: '~/case-study/namma-veetu-anjaraipetti',
+            title: '[Namma Veetu Anjaraipetti — MERN E-Commerce Case Study]',
+            description: 'Full-stack MERN e-commerce platform built and deployed for a client spice business. Focuses on seamless shopping UX, low-friction checkout, real-time push notifications, and performance tracking.',
+            designProcess: 'Designed initial UI/UX wireframes in Figma featuring dark theme aesthetics and fast mobile navigation. Integrated interactive product catalogs, guest checkout flow, and custom badge notifications.',
             features: [
-                'Google authentication & guest checkout workflow',
-                'MongoDB-based order management & Firebase FCM real-time order notifications',
-                'SEO optimization, Google Search Console, GA4, & Microsoft Clarity tracking',
-                'Collaborated directly with client to gather requirements & refine UX'
+                'Google Authentication & low-friction guest checkout workflow',
+                'MongoDB order management & Firebase Cloud Messaging (FCM) real-time notifications',
+                'SEO optimization, Google Search Console, GA4 & Microsoft Clarity telemetry',
+                'Direct client collaboration to refine UI/UX, product cards, and mobile responsiveness'
             ],
-            tech: ['React.js', 'Node.js', 'Express', 'MongoDB', 'Firebase FCM', 'GA4'],
+            tech: ['React.js', 'Node.js', 'Express', 'MongoDB', 'Firebase FCM', 'GA4 / Clarity'],
             githubUrl: 'https://github.com/bharathjai/terminal-portfolio',
             demoUrl: 'https://nammaveetuanjaraipetti.online'
         },
         'project-2': {
-            path: '~/projects/spyware-detection-ai',
-            title: '[Spyware Detection Using AI & ML]',
-            description: 'AI-based spyware detection system that analyzes running processes and classifies suspicious activity using supervised machine learning.',
+            path: '~/case-study/mql5-algo-trader',
+            title: '[Automated Algorithmic Trading EA & Risk Script]',
+            description: 'Quantitative trading engine and Expert Advisor developed in MQL5 & Python. Executes automated backtested algorithmic strategies on MetaTrader with dynamic position sizing and trailing stops.',
+            designProcess: 'Architected modular risk calculation engine using mathematical risk-to-reward ratios. Built custom telemetry scripts communicating execution metrics via webhooks.',
             features: [
-                'Supervised ML classifier analyzing running system processes',
-                'Real-time security dashboard with risk levels & process metrics',
-                'PDF report generation & instant threat alerting support',
-                'Awarded 2nd Prize in Department Mini Project Expo'
+                'MQL5 Expert Advisor executing automated high-probability setups',
+                'Dynamic equity risk management & automated trailing stop algorithm',
+                'Python telemetry integration for strategy backtesting & stats logging',
+                'Strict stop-loss calculations to prevent drawdown during high-volatility events'
             ],
-            tech: ['Python', 'Flask', 'Machine Learning', 'HTML5', 'CSS3', 'JavaScript'],
-            githubUrl: 'https://github.com',
-            demoUrl: 'https://github.com'
+            tech: ['MQL5', 'Python', 'Quantitative Analysis', 'MetaTrader API', 'Risk Engine'],
+            githubUrl: 'https://github.com/bharathjai',
+            demoUrl: 'https://github.com/bharathjai'
         },
         'project-3': {
-            path: '~/projects/code-in-borderland',
-            title: '[Code in Borderland — Technical Event Web]',
-            description: 'Event platform designed and developed for registrations, event rules, participant dashboards, and coding challenge coordination.',
+            path: '~/case-study/spyware-detection-ai',
+            title: '[Spyware Detection Using AI & ML Case Study]',
+            description: 'AI-based security classifier analyzing active system processes to identify and isolate spyware behavior using supervised machine learning models.',
+            designProcess: 'Designed interactive security dashboard UI displaying real-time process risk metrics, threat levels, and automatic PDF report generation.',
             features: [
-                'Supported successful hosting of 100+ participants',
-                'Independently managed the full technical workflow & deployment',
-                'Participant dashboard & coding challenge coordination'
+                'Supervised ML classifier analyzing system process calls & memory footprints',
+                'Real-time web security dashboard with instant threat level visualization',
+                'Automated PDF security audit report generator',
+                'Awarded 2nd Prize in Department Mini Project Expo'
             ],
-            tech: ['Node.js', 'TypeScript', 'HTML5', 'CSS3', 'JavaScript'],
-            githubUrl: 'https://github.com',
-            demoUrl: 'https://github.com'
+            tech: ['Python', 'Flask', 'Supervised ML', 'OpenCV', 'HTML5/CSS3/JS'],
+            githubUrl: 'https://github.com/bharathjai',
+            demoUrl: 'https://github.com/bharathjai'
         },
         'project-4': {
-            path: '~/projects/nextgen-biometric-atm',
-            title: '[NextGen ATM — Biometric Access]',
-            description: 'Cardless ATM concept utilizing facial recognition, cancelable biometric templates, multi-bank account retrieval, and risk-based authentication.',
+            path: '~/case-study/ai-generative-pipeline',
+            title: '[AI Generative Brand & Cinematic Media Pipeline]',
+            description: 'Automated creative pipeline leveraging AI visual models, text generation, and prompt engineering workflows to generate dynamic brand identity assets and cinematic video sequences.',
+            designProcess: 'Mapped out structured prompt-chaining workflows and API integrations for automated media generation, asset scaling, and color harmony validation.',
             features: [
-                'Facial recognition pipeline built with Python & OpenCV',
-                'Cancelable biometric templates for security compliance',
-                'Multi-bank account retrieval & risk-based authentication protocol'
+                'Prompt-chaining pipeline for automated brand visual generation',
+                'Integration with generative visual APIs & video rendering engines',
+                'Custom metadata tagging & dynamic asset portfolio delivery'
+            ],
+            tech: ['Python', 'Generative AI', 'Prompt Engineering', 'Media APIs', 'Node.js'],
+            githubUrl: 'https://github.com/bharathjai',
+            demoUrl: 'https://github.com/bharathjai'
+        },
+        'project-5': {
+            path: '~/case-study/code-in-borderland',
+            title: '[Code in Borderland — Technical Event Platform]',
+            description: 'Full-stack platform built to manage contestant registration, event guidelines, contestant dashboards, and coding challenge coordination during a college tech fest.',
+            designProcess: 'Created custom terminal-inspired gamer aesthetic for participant portals, leaderboard tables, and live announcements.',
+            features: [
+                'Successfully supported 100+ live participants simultaneously',
+                'Independently managed registration pipeline & leaderboard state',
+                'Responsive dashboard layout for challenge viewing and submission'
+            ],
+            tech: ['Node.js', 'TypeScript', 'HTML5', 'CSS3', 'JavaScript'],
+            githubUrl: 'https://github.com/bharathjai',
+            demoUrl: 'https://github.com/bharathjai'
+        },
+        'project-6': {
+            path: '~/case-study/nextgen-biometric-atm',
+            title: '[NextGen ATM — Biometric Security Case Study]',
+            description: 'Cardless ATM prototype integrating facial recognition, cancelable biometric templates, multi-bank account retrieval, and risk-based authentication algorithms.',
+            designProcess: 'Iterated on UI flow to ensure quick facial scans with clear step-by-step visual guidance, ensuring accessibility and zero card requirement.',
+            features: [
+                'Facial recognition pipeline implemented via Python & OpenCV',
+                'Cancelable biometric templates for enhanced user privacy',
+                'Multi-bank account retrieval & risk scoring authentication'
             ],
             tech: ['Python', 'OpenCV', 'Machine Learning', 'Biometric Security'],
-            githubUrl: 'https://github.com',
-            demoUrl: 'https://github.com'
+            githubUrl: 'https://github.com/bharathjai',
+            demoUrl: 'https://github.com/bharathjai'
         }
     };
 
@@ -512,35 +849,19 @@ function initProjectModals() {
                 path: pathText,
                 title: titleText,
                 description: descText,
+                designProcess: 'Iterative prototyping using responsive UI principles, dark mode accents, and clear technical documentation.',
                 features: ['Automated deployment pipeline', 'Modular system architecture', 'Responsive terminal interface'],
                 tech: techList.length > 0 ? techList : ['[Tech Stack]'],
-                githubUrl: 'https://github.com',
-                demoUrl: 'https://example.com'
-            };
-            console.log(`[Modal] Using extracted DOM data for project: ${titleText}`);
-        } else {
-            console.log(`[Modal] Loaded dictionary payload for project ID: ${projectId}`);
-        }
-
-        // Error check if data is still completely empty
-        if (!data.title && !data.description) {
-            console.warn('[Modal Warning] No project payload found. Displaying fallback info.');
-            data = {
-                path: '~/projects/unknown',
-                title: '[No Project Data Found]',
-                description: '[Project description payload is currently empty. Replace with real project details.]',
-                features: ['[Feature placeholder 1]', '[Feature placeholder 2]'],
-                tech: ['[Technology Placeholder]'],
-                githubUrl: 'https://github.com',
-                demoUrl: 'https://example.com'
+                githubUrl: 'https://github.com/bharathjai',
+                demoUrl: 'https://github.com/bharathjai'
             };
         }
 
         // Render modal content
-        modalPath.textContent = data.path || '~/projects/details';
+        modalPath.textContent = data.path || '~/case-study/details';
 
-        const techPills = (data.tech || []).map(t => `<span class="tag" style="font-size:0.85rem; padding: 0.2rem 0.5rem;">${escapeHTML(t)}</span>`).join(' ');
-        const featureItems = (data.features || ['[Feature Detail 1]']).map(f => `<li style="margin-bottom:0.35rem;">${escapeHTML(f)}</li>`).join('');
+        const techPills = (data.tech || []).map(t => `<span class="tag" style="font-size:0.85rem; padding: 0.25rem 0.6rem;">${escapeHTML(t)}</span>`).join(' ');
+        const featureItems = (data.features || ['[Feature Detail 1]']).map(f => `<li style="margin-bottom:0.4rem;">${escapeHTML(f)}</li>`).join('');
 
         modalBody.innerHTML = `
             <div class="modal-project-content">
@@ -550,19 +871,26 @@ function initProjectModals() {
                     ${escapeHTML(data.description || '[Project Description Placeholder]')}
                 </p>
 
-                <h4 class="info-title" style="margin-bottom: 0.5rem; font-size: 0.95rem;">> SYSTEM ARCHITECTURE & KEY FEATURES</h4>
+                ${data.designProcess ? `
+                <h4 class="info-title" style="margin-bottom: 0.5rem; font-size: 0.95rem;">> UI/UX DESIGN & ARCHITECTURE PROCESS</h4>
+                <p class="bio-paragraph" style="margin-bottom: 1.2rem; font-size: 0.92rem; line-height: 1.6;">
+                    ${escapeHTML(data.designProcess)}
+                </p>
+                ` : ''}
+
+                <h4 class="info-title" style="margin-bottom: 0.5rem; font-size: 0.95rem;">> SYSTEM ARCHITECTURE & KEY HIGHLIGHTS</h4>
                 <ul style="margin-left: 1.4rem; margin-bottom: 1.5rem; color: var(--neon-yellow); font-size: 0.9rem;">
                     ${featureItems}
                 </ul>
 
-                <h4 class="info-title" style="margin-bottom: 0.5rem; font-size: 0.95rem;">> STACK / TECHNOLOGIES USED</h4>
+                <h4 class="info-title" style="margin-bottom: 0.5rem; font-size: 0.95rem;">> TECH STACK & TOOLS</h4>
                 <div class="tech-tags" style="margin-bottom: 1.8rem;">
                     ${techPills}
                 </div>
 
-                <div class="hero-actions" style="margin-top: 1rem; gap: 0.8rem; display: flex;">
-                    <a href="${escapeHTML(data.githubUrl || 'https://github.com')}" target="_blank" rel="noopener noreferrer" class="btn-box glow-btn">[> REPOSITORY_SOURCE]</a>
-                    <a href="${escapeHTML(data.demoUrl || 'https://example.com')}" target="_blank" rel="noopener noreferrer" class="btn-box glow-btn">[> LIVE_DEMO]</a>
+                <div class="hero-actions" style="margin-top: 1rem; gap: 0.8rem; display: flex; flex-wrap: wrap;">
+                    <a href="${escapeHTML(data.githubUrl || 'https://github.com/bharathjai')}" target="_blank" rel="noopener noreferrer" class="btn-box glow-btn">[> REPOSITORY_SOURCE]</a>
+                    <a href="${escapeHTML(data.demoUrl || 'https://nammaveetuanjaraipetti.online')}" target="_blank" rel="noopener noreferrer" class="btn-box glow-btn">[> LIVE_DEMO]</a>
                 </div>
             </div>
         `;
@@ -606,7 +934,7 @@ function initProjectModals() {
 }
 
 /* ==========================================================================
-   7. CONTACT FORM SUBMISSION WITH TERMINAL FEEDBACK LOG
+   11. CONTACT FORM SUBMISSION WITH TERMINAL FEEDBACK LOG
    ========================================================================== */
 function initContactForm() {
     const form = document.getElementById('contact-form');
@@ -646,7 +974,7 @@ function initContactForm() {
 }
 
 /* ==========================================================================
-   8. FOOTER LIVE UTC CLOCK & YEAR
+   12. FOOTER LIVE UTC CLOCK & YEAR
    ========================================================================== */
 function initLiveClock() {
     const clockEl = document.getElementById('live-clock');
@@ -672,3 +1000,4 @@ function initLiveClock() {
 
 // Guarantee clock runs immediately
 initLiveClock();
+

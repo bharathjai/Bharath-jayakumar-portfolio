@@ -30,7 +30,53 @@
     --text-shadow-glow: 0 0 8px rgba(255, 230, 0, 0.5);
 }
 
-/* Base Reset & Typography */
+/* Theme Variant 1: Green Phosphor CRT Matrix Theme */
+body.theme-green {
+    --neon-yellow: #00ff41;
+    --neon-yellow-bright: #39ff14;
+    --neon-yellow-dark: #008f11;
+    --neon-yellow-dim: #00660c;
+    --neon-yellow-glow: rgba(0, 255, 65, 0.45);
+    --neon-yellow-soft: rgba(0, 255, 65, 0.1);
+    --text-primary: #00ff41;
+    --text-body: #c2f5d0;
+    --text-muted: #66cc80;
+    --panel-border: #00ff41;
+}
+
+/* Theme Variant 2: Amber Retro Terminal Theme */
+body.theme-amber {
+    --neon-yellow: #ffb000;
+    --neon-yellow-bright: #ffd000;
+    --neon-yellow-dark: #cc8800;
+    --neon-yellow-dim: #885500;
+    --neon-yellow-glow: rgba(255, 176, 0, 0.45);
+    --neon-yellow-soft: rgba(255, 176, 0, 0.1);
+    --text-primary: #ffb000;
+    --text-body: #ffe2aa;
+    --text-muted: #cca055;
+    --panel-border: #ffb000;
+}
+
+/* Theme Variant 3: High-Contrast Light Hacker Theme */
+body.theme-light {
+    --bg-black: #f0f0f0;
+    --neon-yellow: #0055cc;
+    --neon-yellow-bright: #0033aa;
+    --neon-yellow-dark: #002277;
+    --neon-yellow-dim: #99bbff;
+    --neon-yellow-glow: rgba(0, 85, 204, 0.25);
+    --neon-yellow-soft: rgba(0, 85, 204, 0.08);
+    --panel-bg: #ffffff;
+    --panel-border: #0055cc;
+    --text-primary: #0055cc;
+    --text-body: #111111;
+    --text-bright: #000000;
+    --text-muted: #444444;
+    background-color: #f0f0f0;
+}
+
+/* Base Reset & Typography with clamp() Font Scaling */
 * {
     margin: 0;
     padding: 0;
@@ -42,7 +88,7 @@ html {
     background-color: var(--bg-black);
     color: var(--text-body);
     font-family: var(--font-mono);
-    font-size: 16px;
+    font-size: clamp(14px, 1.2vw, 16px);
     line-height: 1.75;
 }
 
@@ -300,6 +346,12 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: space-between;
     align-items: center;
     font-size: 0.85rem;
+    cursor: grab;
+    user-select: none;
+}
+
+.box-header:active {
+    cursor: grabbing;
 }
 
 .box-title {
@@ -319,15 +371,39 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .control-dot {
-    width: 10px;
-    height: 10px;
+    width: 11px;
+    height: 11px;
     border: 1px solid var(--neon-yellow);
     border-radius: 50%;
     display: inline-block;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.control-dot:nth-child(1) { background-color: rgba(255, 51, 51, 0.6); }
-.control-dot:nth-child(2) { background-color: rgba(255, 230, 0, 0.6); }
-.control-dot:nth-child(3) { background-color: rgba(0, 255, 102, 0.6); }
+.control-dot:hover {
+    transform: scale(1.35);
+    box-shadow: 0 0 6px var(--neon-yellow);
+}
+.control-dot:nth-child(1) { background-color: rgba(255, 51, 51, 0.7); }
+.control-dot:nth-child(2) { background-color: rgba(255, 230, 0, 0.7); }
+.control-dot:nth-child(3) { background-color: rgba(0, 255, 102, 0.7); }
+
+.hero-ascii-wireframe {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1.2rem 0;
+    overflow: hidden;
+}
+
+#ascii-cube-pre {
+    font-family: var(--font-mono);
+    font-size: clamp(10px, 1.4vw, 13px);
+    line-height: 1.15;
+    color: var(--neon-yellow);
+    text-shadow: 0 0 8px var(--neon-yellow-glow);
+    white-space: pre;
+    user-select: none;
+}
 
 .box-body {
     padding: 2.2rem 2.4rem;
