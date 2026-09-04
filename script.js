@@ -571,13 +571,8 @@ function initInteractiveCLI() {
                 break;
 
             case 'projects':
-                printLine(`FEATURED REPOSITORIES & CASE STUDIES:`);
+                printLine(`FEATURED REPOSITORY & CASE STUDY:`);
                 printLine(`  1. Namma Veetu Anjaraipetti [MERN E-Commerce Platform] (Live: https://nammaveetuanjaraipetti.online)`);
-                printLine(`  2. Automated Algorithmic Trading EA [MQL5 & Python Quantitative Risk Script]`);
-                printLine(`  3. Spyware Detection Using AI & ML [Python / Flask / Supervised ML] (2nd Prize Expo)`);
-                printLine(`  4. AI Generative Brand & Media Pipeline [Python / Synthetic Visual Models]`);
-                printLine(`  5. Code in Borderland [Node.js / TypeScript] (100+ Participants Event Platform)`);
-                printLine(`  6. NextGen ATM — Multi-Bank Biometric Access [Python / OpenCV / ML]`);
                 document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' });
                 break;
 
@@ -670,78 +665,6 @@ function initProjectModals() {
             tech: ['React.js', 'Node.js', 'Express', 'MongoDB', 'Firebase FCM', 'GA4 / Clarity'],
             githubUrl: 'https://github.com/bharathjai/terminal-portfolio',
             demoUrl: 'https://nammaveetuanjaraipetti.online'
-        },
-        'project-2': {
-            path: '~/case-study/mql5-algo-trader',
-            title: '[Automated Algorithmic Trading EA & Risk Script]',
-            description: 'Quantitative trading engine and Expert Advisor developed in MQL5 & Python. Executes automated backtested algorithmic strategies on MetaTrader with dynamic position sizing and trailing stops.',
-            designProcess: 'Architected modular risk calculation engine using mathematical risk-to-reward ratios. Built custom telemetry scripts communicating execution metrics via webhooks.',
-            features: [
-                'MQL5 Expert Advisor executing automated high-probability setups',
-                'Dynamic equity risk management & automated trailing stop algorithm',
-                'Python telemetry integration for strategy backtesting & stats logging',
-                'Strict stop-loss calculations to prevent drawdown during high-volatility events'
-            ],
-            tech: ['MQL5', 'Python', 'Quantitative Analysis', 'MetaTrader API', 'Risk Engine'],
-            githubUrl: 'https://github.com/bharathjai',
-            demoUrl: 'https://github.com/bharathjai'
-        },
-        'project-3': {
-            path: '~/case-study/spyware-detection-ai',
-            title: '[Spyware Detection Using AI & ML Case Study]',
-            description: 'AI-based security classifier analyzing active system processes to identify and isolate spyware behavior using supervised machine learning models.',
-            designProcess: 'Designed interactive security dashboard UI displaying real-time process risk metrics, threat levels, and automatic PDF report generation.',
-            features: [
-                'Supervised ML classifier analyzing system process calls & memory footprints',
-                'Real-time web security dashboard with instant threat level visualization',
-                'Automated PDF security audit report generator',
-                'Awarded 2nd Prize in Department Mini Project Expo'
-            ],
-            tech: ['Python', 'Flask', 'Supervised ML', 'OpenCV', 'HTML5/CSS3/JS'],
-            githubUrl: 'https://github.com/bharathjai',
-            demoUrl: 'https://github.com/bharathjai'
-        },
-        'project-4': {
-            path: '~/case-study/ai-generative-pipeline',
-            title: '[AI Generative Brand & Cinematic Media Pipeline]',
-            description: 'Automated creative pipeline leveraging AI visual models, text generation, and prompt engineering workflows to generate dynamic brand identity assets and cinematic video sequences.',
-            designProcess: 'Mapped out structured prompt-chaining workflows and API integrations for automated media generation, asset scaling, and color harmony validation.',
-            features: [
-                'Prompt-chaining pipeline for automated brand visual generation',
-                'Integration with generative visual APIs & video rendering engines',
-                'Custom metadata tagging & dynamic asset portfolio delivery'
-            ],
-            tech: ['Python', 'Generative AI', 'Prompt Engineering', 'Media APIs', 'Node.js'],
-            githubUrl: 'https://github.com/bharathjai',
-            demoUrl: 'https://github.com/bharathjai'
-        },
-        'project-5': {
-            path: '~/case-study/code-in-borderland',
-            title: '[Code in Borderland — Technical Event Platform]',
-            description: 'Full-stack platform built to manage contestant registration, event guidelines, contestant dashboards, and coding challenge coordination during a college tech fest.',
-            designProcess: 'Created custom terminal-inspired gamer aesthetic for participant portals, leaderboard tables, and live announcements.',
-            features: [
-                'Successfully supported 100+ live participants simultaneously',
-                'Independently managed registration pipeline & leaderboard state',
-                'Responsive dashboard layout for challenge viewing and submission'
-            ],
-            tech: ['Node.js', 'TypeScript', 'HTML5', 'CSS3', 'JavaScript'],
-            githubUrl: 'https://github.com/bharathjai',
-            demoUrl: 'https://github.com/bharathjai'
-        },
-        'project-6': {
-            path: '~/case-study/nextgen-biometric-atm',
-            title: '[NextGen ATM — Biometric Security Case Study]',
-            description: 'Cardless ATM prototype integrating facial recognition, cancelable biometric templates, multi-bank account retrieval, and risk-based authentication algorithms.',
-            designProcess: 'Iterated on UI flow to ensure quick facial scans with clear step-by-step visual guidance, ensuring accessibility and zero card requirement.',
-            features: [
-                'Facial recognition pipeline implemented via Python & OpenCV',
-                'Cancelable biometric templates for enhanced user privacy',
-                'Multi-bank account retrieval & risk scoring authentication'
-            ],
-            tech: ['Python', 'OpenCV', 'Machine Learning', 'Biometric Security'],
-            githubUrl: 'https://github.com/bharathjai',
-            demoUrl: 'https://github.com/bharathjai'
         }
     };
 
