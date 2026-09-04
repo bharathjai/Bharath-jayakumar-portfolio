@@ -439,7 +439,7 @@ function initProjectModals() {
                 'Collaborated directly with client to gather requirements & refine UX'
             ],
             tech: ['React.js', 'Node.js', 'Express', 'MongoDB', 'Firebase FCM', 'GA4'],
-            githubUrl: 'https://github.com',
+            githubUrl: 'https://github.com/bharathjai/terminal-portfolio',
             demoUrl: 'https://nammaveetuanjaraipetti.online'
         },
         'project-2': {
