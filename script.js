@@ -602,7 +602,7 @@ function initInteractiveCLI() {
                 break;
 
             case 'whoami':
-                printLine(`USER: guest_visitor | VIEWING PROFILE: BHARATH JAYAKUMAR`);
+                printLine(`USER: bharath_visitor | VIEWING PROFILE: BHARATH JAYAKUMAR`);
                 break;
 
             case 'sudo':
