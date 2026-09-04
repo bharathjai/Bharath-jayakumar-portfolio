@@ -217,8 +217,14 @@ function initFilters() {
             const filterValue = btn.getAttribute('data-filter');
 
             skillCards.forEach(card => {
+                const fillBar = card.querySelector('.progress-bar-fill');
                 if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
                     card.style.display = 'block';
+                    if (fillBar) {
+                        const targetWidth = fillBar.style.width;
+                        fillBar.style.width = '0%';
+                        setTimeout(() => { fillBar.style.width = targetWidth; }, 50);
+                    }
                 } else {
                     card.style.display = 'none';
                 }
@@ -657,9 +663,12 @@ function initLiveClock() {
         const hrs = String(now.getUTCHours()).padStart(2, '0');
         const mins = String(now.getUTCMinutes()).padStart(2, '0');
         const secs = String(now.getUTCSeconds()).padStart(2, '0');
-        clockEl.textContent = `${hrs}:${mins}:${secs} UTC`;
+        clockEl.innerHTML = `${hrs}:${mins}:${secs} UTC <span class="blink-symbol">|</span> LIVE`;
     }
 
     updateClock();
     setInterval(updateClock, 1000);
 }
+
+// Guarantee clock runs immediately
+initLiveClock();
