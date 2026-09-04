@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Personal Portfolio - Terminal & Hacker Theme featuring interactive CLI, neon yellow aesthetics, and clean project showcase.">
+    <meta name="keywords" content="Portfolio, Full Stack Developer, Terminal Theme, Hacker Aesthetic, Web Developer">
+    <meta name="author" content="[Your Name]">
+    <title>BHARATH JAYAKUMAR | Terminal Portfolio</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%23ffe600%22>⚡</text></svg>">
+    
+    <!-- Google Fonts: JetBrains Mono & VT323 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&family=VT323&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Canvas for Faint Matrix/Particle Grid -->
+    <canvas id="terminal-bg-canvas"></canvas>
+    
+    <!-- CRT Scanline Effect Overlay -->
+    <div id="crt-overlay"></div>
+
+    <!-- Navigation Bar -->
+    <header class="top-nav">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo" id="nav-logo">
+                <span class="prompt-user">bharath@terminal</span>:<span class="prompt-path">~</span>$ <span class="blink-symbol">█</span>
+            </a>
+            
+            <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation menu">
+                [<span id="hamburger-icon">MENU</span>]
+            </button>
+
+            <nav class="nav-menu" id="nav-menu">
+                <a href="#about" class="nav-link-box">[~/about]</a>
+                <a href="#skills" class="nav-link-box">[~/skills]</a>
+                <a href="#projects" class="nav-link-box">[~/projects]</a>
+                <a href="#experience" class="nav-link-box">[~/experience]</a>
+                <a href="#contact" class="nav-link-box">[~/contact]</a>
+                <button class="cli-trigger-btn" id="open-cli-btn" title="Open Interactive CLI Terminal">[> OPEN_CLI]</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="main-layout">
+        
+        <!-- SECTION 1: HERO / BOOT SEQUENCE -->
+        <section id="hero" class="terminal-section">
+            <div class="terminal-box hero-box">
+                <div class="box-header">
+                    <span class="box-title">~/hero/boot_sequence.sh</span>
+                    <div class="box-controls">
+                        <span class="control-dot"></span>
+                        <span class="control-dot"></span>
+                        <span class="control-dot"></span>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="boot-log-container" id="boot-log">
+                        <div class="log-line">> INITIALIZING CORE ARCHITECTURE... [OK]</div>
+                        <div class="log-line">> LOADING USER PROFILE: BHARATH JAYAKUMAR... [OK]</div>
+                        <div class="log-line">> MOUNTING CYBER SECURITY & FULL-STACK MODULES... [OK]</div>
+                        <div class="log-line highlight-line">> STATUS: BHARATH_PROFILE_ONLINE</div>
+                    </div>
+                    
+                    <div class="hero-intro">
+                        <div class="cmd-prompt"><span class="prompt-user">bharath@terminal</span>:<span class="prompt-path">~</span>$ <span class="cmd-text">whoami</span></div>
+                        <h1 class="hero-name typewriter-target" data-type-text="BHARATH JAYAKUMAR" data-speed="70">
+                            <span class="typed-text"></span><span class="cursor">█</span>
+                        </h1>
+                        
+                        <div class="cmd-prompt"><span class="prompt-user">bharath@terminal</span>:<span class="prompt-path">~</span>$ <span class="cmd-text">cat role.txt</span></div>
+                        <h2 class="hero-role typewriter-target" data-type-text="Software Developer | Cyber Security | Full-Stack Development" data-speed="35" data-delay="900">
+                            <span class="typed-text"></span><span class="cursor">█</span>
+                        </h2>
+                        
+                        <p class="hero-tagline">
+                            > Building secure, high-performance web platforms, AI-driven applications, and scalable backend services with Java, Node.js, and React.
+                        </p>
+
+                        <div class="hero-actions">
+                            <a href="#projects" class="btn-box glow-btn">[> EXPLORE_PROJECTS]</a>
+                            <a href="#contact" class="btn-box glow-btn">[> CONTACT_ME]</a>
+                            <button class="btn-box glow-btn secondary-btn" id="hero-cli-trigger">[> LAUNCH_CLI]</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: ABOUT ME -->
+        <section id="about" class="terminal-section">
+            <div class="terminal-box">
+                <div class="box-header">
+                    <span class="box-title">~/about</span>
+                    <span class="box-status">MODE: READ-ONLY</span>
+                </div>
+                <div class="box-body">
+                    <div class="section-command">
+                        <span class="prompt-user">bharath@terminal</span>:<span class="prompt-path">~/about</span>$ <span class="cmd-text">cat bio.txt --verbose</span>
+                    </div>
+
+                    <div class="about-grid">
+                        <div class="about-content">
+                            <h3 class="section-heading typewriter-target" data-type-text="> PROFILE & PROFESSIONAL SUMMARY" data-speed="40">
+                                <span class="typed-text"></span><span class="cursor">█</span>
+                            </h3>
+
+                            <p class="bio-paragraph">
+                                Cyber Security graduate and software developer with hands-on experience building web applications using <strong class="text-highlight">Java, Node.js, React, TypeScript, MongoDB, and MySQL</strong>. Developed client-facing e-commerce and event platforms, implementing authentication, order management, notifications, analytics, and responsive user interfaces.
+                            </p>
+                            
+                            <p class="bio-paragraph">
+                                Possess a strong foundation in <span class="text-highlight">Object-Oriented Programming (OOP), RESTful APIs, Database Design, Debugging, Data Structures, and Secure Software Development Practices</span>.
+                            </p>
+
+                            <div class="quick-specs-grid">
+                                <div class="spec-card">
+                                    <span class="spec-label">DEGREE</span>
+                                    <span class="spec-value">B.E. Cyber Security</span>
+                                </div>
+                                <div class="spec-card">
+                                    <span class="spec-label">COLLEGE</span>
+                                    <span class="spec-value">SRM Valliammai Eng College</span>
+                                </div>
+                                <div class="spec-card">
+                                    <span class="spec-label">LOCATION</span>
+                                    <span class="spec-value">Chennai, Tamil Nadu</span>
+                                </div>
+                                <div class="spec-card">
+                                    <span class="spec-label">STATUS</span>
+                                    <span class="spec-value text-accent">[OPEN TO OPPORTUNITIES]</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="about-terminal-avatar">
+                            <div class="avatar-box">
+                                <pre class="ascii-art">
+  +-----------------------+
+  |  BHARATH_HEADSHOT.RAW |
+  |                       |
+  |     .---.             |
+  |    /     \            |
+  |   |(o) (o)|           |
+  |   |   ^   |           |
+  |    \  =  /            |
+  |     `---'             |
+  |    /|   |\            |
+  |   /_|___|_\           |
+  |                       |
+  +-----------------------+
+  [CYBER SECURITY & DEV]
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: SKILLS -->
+        <section id="skills" class="terminal-section">
+            <div class="terminal-box">
+                <div class="box-header">
+                    <span class="box-title">~/skills</span>
+                    <span class="box-status">EXEC: ./list_skills.sh</span>
+                </div>
+                <div class="box-body">
+                    <div class="section-command">
+                        <span class="prompt-user">bharath@terminal</span>:<span class="prompt-path">~/skills</span>$ <span class="cmd-text">./list_skills.sh --all</span>
+                    </div>
+
+                    <h3 class="section-heading typewriter-target" data-type-text="> TECHNICAL SKILLS & PROFICIENCY" data-speed="40">
+                        <span class="typed-text"></span><span class="cursor">█</span>
+                    </h3>
+
+                    <!-- Skills Filter Buttons -->
+                    <div class="filter-group" id="skills-filter">
+                        <button class="filter-btn active" data-filter="all">[ALL_SKILLS]</button>
+                        <button class="filter-btn" data-filter="languages">[LANGUAGES]</button>
+                        <button class="filter-btn" data-filter="web">[WEB_TECH]</button>
+                        <button class="filter-btn" data-filter="database">[DATABASES]</button>
+                        <button class="filter-btn" data-filter="tools">[TOOLS_CONCEPTS]</button>
+                    </div>
+
+                    <!-- Skills Grid with Hacker Progress Bars -->
+                    <div class="skills-grid" id="skills-grid">
+                        
+                        <!-- Skill 1: Java -->
+                        <div class="skill-card" data-category="languages">
+                            <div class="skill-info">
+                                <span class="skill-name">> Java (OOP & Core)</span>
+                                <span class="skill-pct">90%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 90%;"></div>
+                            </div>
+                            <span class="progress-bar-text">[████████████░░]</span>
+                        </div>
+
+                        <!-- Skill 2: JavaScript / TypeScript -->
+                        <div class="skill-card" data-category="languages">
+                            <div class="skill-info">
+                                <span class="skill-name">> JavaScript / TypeScript</span>
+                                <span class="skill-pct">88%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 88%;"></div>
+                            </div>
+                            <span class="progress-bar-text">[███████████░░░]</span>
+                        </div>
+
+                        <!-- Skill 3: Python -->
+                        <div class="skill-card" data-category="languages">
+                            <div class="skill-info">
+                                <span class="skill-name">> Python (AI/ML & Flask)</span>
+                                <span class="skill-pct">82%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 82%;"></div>
+                            </div>
+                            <span class="progress-bar-text">[██████████░░░░]</span>
+                        </div>
+
+                        <!-- Skill 4: Node.js & Express -->
+                        <div class="skill-card" data-category="web">
+                            <div class="skill-info">
+                                <span class="skill-name">> Node.js / Express / REST APIs</span>
+                                <span class="skill-pct">86%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 86%;"></div>
+                            </div>
+                            <span class="progress-bar-text">[███████████░░░]</span>
+                        </div>
+
+                        <!-- Skill 5: React.js -->
+                        <div class="skill-card" data-category="web">
+                            <div class="skill-info">
+                                <span class="skill-name">> React.js / HTML5 / CSS3</span>
+                                <span class="skill-pct">92%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 92%;"></div>
+                            </div>
+                            <span class="progress-bar-text">[████████████░░]</span>
+                        </div>
+
+                        <!-- Skill 6: MongoDB -->
+                        <div class="skill-card" data-category="database">
+                            <div class="skill-info">
+                                <span class="skill-name">> MongoDB (NoSQL)</span>
+                                <span class="skill-pct">85%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 85%;"></div>
+                            </div>
+                            <span class="progress-bar-text">[██████████░░░░]</span>
+                        </div>
+
+                        <!-- Skill 7: MySQL -->
+                        <div class="skill-card" data-category="database">
+                            <div class="skill-info">
+                                <span class="skill-name">> MySQL / SQL Queries</span>
+                                <span class="skill-pct">84%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 84%;"></div>
+                            </div>
+                            <span class="progress-bar-text">[██████████░░░░]</span>
+                        </div>
+
+                        <!-- Skill 8: Git & GitHub -->
+                        <div class="skill-card" data-category="tools">
+                            <div class="skill-info">
+                                <span class="skill-name">> Git / GitHub / Postman</span>
+                                <span class="skill-pct">90%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 90%;"></div>
+                            </div>
+                            <span class="progress-bar-text">[████████████░░]</span>
+                        </div>
+
+                        <!-- Skill 9: Firebase & Analytics -->
+                        <div class="skill-card" data-category="tools">
+                            <div class="skill-info">
+                                <span class="skill-name">> Firebase FCM / GA4 / Clarity</span>
+                                <span class="skill-pct">80%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 80%;"></div>
+                            </div>
+                            <span class="progress-bar-text">[██████████░░░░]</span>
+                        </div>
+
+                        <!-- Skill 10: Cybersecurity Concepts -->
+                        <div class="skill-card" data-category="tools">
+                            <div class="skill-info">
+                                <span class="skill-name">> Cybersecurity & OOP Fundamentals</span>
+                                <span class="skill-pct">88%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 88%;"></div>
+                            </div>
+                            <span class="progress-bar-text">[███████████░░░]</span>
+                        </div>
+                    </div>
+
+                    <!-- Additional Bullet Checklist -->
+                    <div class="skills-checklist">
+                        <div class="checklist-item">[✓] Object-Oriented Programming (OOP)</div>
+                        <div class="checklist-item">[✓] Data Structures & Algorithms</div>
+                        <div class="checklist-item">[✓] Agile & Unit Testing Practices</div>
+                        <div class="checklist-item">[✓] Cybersecurity & Cloud Concepts</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: PROJECTS -->
+        <section id="projects" class="terminal-section">
+            <div class="terminal-box">
+                <div class="box-header">
+                    <span class="box-title">~/projects</span>
+                    <span class="box-status">LOG: git log --oneline</span>
+                </div>
+                <div class="box-body">
+                    <div class="section-command">
+                        <span class="prompt-user">bharath@terminal</span>:<span class="prompt-path">~/projects</span>$ <span class="cmd-text">git log --projects --all</span>
+                    </div>
+
+                    <h3 class="section-heading typewriter-target" data-type-text="> FEATURED PROJECTS & FREELANCE WORK" data-speed="40">
+                        <span class="typed-text"></span><span class="cursor">█</span>
+                    </h3>
+
+                    <!-- Project Filter Tabs -->
+                    <div class="filter-group" id="projects-filter">
+                        <button class="filter-btn active" data-filter="all">[ALL_PROJECTS]</button>
+                        <button class="filter-btn" data-filter="freelance">[FREELANCE_MERN]</button>
+                        <button class="filter-btn" data-filter="aiml">[AI_AND_ML]</button>
+                        <button class="filter-btn" data-filter="web">[WEB_PLATFORMS]</button>
+                    </div>
+
+                    <!-- Projects Grid -->
+                    <div class="projects-grid" id="projects-grid">
+                        
+                        <!-- Project 1: Namma Veetu Anjaraipetti -->
+                        <div class="project-card" data-category="freelance">
+                            <div class="card-path">~/projects/namma-veetu-anjaraipetti</div>
+                            <h4 class="project-title">[Namma Veetu Anjaraipetti — E-Commerce]</h4>
+                            <p class="project-desc">
+                                Full-stack MERN e-commerce platform built & deployed for a local spice business. Features Google auth, guest checkout, MongoDB order workflows, and Firebase FCM order notifications. Integrated SEO, GA4, & Microsoft Clarity.
+                            </p>
+                            <div class="tech-tags">
+                                <span class="tag">[React]</span>
+                                <span class="tag">[Node.js]</span>
+                                <span class="tag">[MongoDB]</span>
+                                <span class="tag">[Firebase FCM]</span>
+                                <span class="tag">[GA4/Clarity]</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://nammaveetuanjaraipetti.online" target="_blank" rel="noopener noreferrer" class="btn-box-sm glow-btn-sm">[LIVE_SITE]</a>
+                                <a href="#" class="btn-box-sm project-modal-trigger" data-project="project-1">[DETAILS]</a>
+                            </div>
+                        </div>
+
+                        <!-- Project 2: Spyware Detection Using AI and ML -->
+                        <div class="project-card" data-category="aiml">
+                            <div class="card-path">~/projects/spyware-detection-ai</div>
+                            <h4 class="project-title">[Spyware Detection Using AI & ML]</h4>
+                            <p class="project-desc">
+                                AI-based spyware detection system that analyzes running system processes and classifies suspicious activity using supervised machine learning. Includes real-time dashboard, risk levels, and PDF report generation.
+                            </p>
+                            <div class="tech-tags">
+                                <span class="tag">[Python]</span>
+                                <span class="tag">[Flask]</span>
+                                <span class="tag">[Machine Learning]</span>
+                                <span class="tag">[HTML/CSS/JS]</span>
+                            </div>
+                            <div class="project-links">
+                                <span class="btn-box-sm text-accent" style="border: 1px dashed var(--neon-yellow);">[2nd PRIZE EXPO]</span>
+                                <a href="#" class="btn-box-sm project-modal-trigger" data-project="project-2">[DETAILS]</a>
+                            </div>
+                        </div>
+
+                        <!-- Project 3: Code in Borderland -->
+                        <div class="project-card" data-category="web">
+                            <div class="card-path">~/projects/code-in-borderland</div>
+                            <h4 class="project-title">[Code in Borderland — Technical Event Web]</h4>
+                            <p class="project-desc">
+                                Event platform designed for participant registrations, event rules, participant dashboards, and coding challenge coordination. Supported 100+ participants smoothly.
+                            </p>
+                            <div class="tech-tags">
+                                <span class="tag">[Node.js]</span>
+                                <span class="tag">[TypeScript]</span>
+                                <span class="tag">[HTML5/CSS3]</span>
+                                <span class="tag">[JavaScript]</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="#" class="btn-box-sm project-modal-trigger" data-project="project-3">[DETAILS]</a>
+                            </div>
+                        </div>
+
+                        <!-- Project 4: NextGen ATM -->
+                        <div class="project-card" data-category="aiml">
+                            <div class="card-path">~/projects/nextgen-biometric-atm</div>
+                            <h4 class="project-title">[NextGen ATM — Biometric Access]</h4>
+                            <p class="project-desc">
+                                Cardless ATM concept utilizing facial recognition, cancelable biometric templates, multi-bank account retrieval, and risk-based authentication for enhanced transaction security.
+                            </p>
+                            <div class="tech-tags">
+                                <span class="tag">[Python]</span>
+                                <span class="tag">[OpenCV]</span>
+                                <span class="tag">[Machine Learning]</span>
+                                <span class="tag">[Biometrics]</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="#" class="btn-box-sm project-modal-trigger" data-project="project-4">[DETAILS]</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: EXPERIENCE & EDUCATION -->
+        <section id="experience" class="terminal-section">
+            <div class="terminal-box">
+                <div class="box-header">
+                    <span class="box-title">~/experience</span>
+                    <span class="box-status">SERVICE: journalctl.service</span>
+                </div>
+                <div class="box-body">
+                    <div class="section-command">
+                        <span class="prompt-user">bharath@terminal</span>:<span class="prompt-path">~/experience</span>$ <span class="cmd-text">journalctl -u career.service -n 10</span>
+                    </div>
+
+                    <h3 class="section-heading typewriter-target" data-type-text="> EXPERIENCE, EDUCATION & CERTIFICATIONS" data-speed="40">
+                        <span class="typed-text"></span><span class="cursor">█</span>
+                    </h3>
+
+                    <div class="timeline-container">
+                        
+                        <!-- Item 1: Freelance -->
+                        <div class="timeline-item">
+                            <div class="timeline-marker">[WORK]</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-role">> Freelance Full-Stack Developer</span>
+                                    <span class="timeline-date">[2026]</span>
+                                </div>
+                                <div class="timeline-company">@ Namma Veetu Anjaraipetti</div>
+                                <p class="timeline-desc">
+                                    Built & deployed a MERN e-commerce platform for a local spice business. Integrated Google Auth, guest checkout, MongoDB order workflows, Firebase notifications, SEO, GA4, and Microsoft Clarity tracking.<br>
+                                    <span class="text-accent">> Live Platform:</span> <a href="https://nammaveetuanjaraipetti.online" target="_blank" rel="noopener noreferrer" class="ep-link">https://nammaveetuanjaraipetti.online</a>
+                                </p>
+                                <div class="timeline-tags">
+                                    <span class="tag-sm">[React]</span>
+                                    <span class="tag-sm">[Node.js]</span>
+                                    <span class="tag-sm">[MongoDB]</span>
+                                    <span class="tag-sm">[Firebase FCM]</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Item 2: Education BE -->
+                        <div class="timeline-item">
+                            <div class="timeline-marker">[EDU]</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-role">> B.E. in Cyber Security</span>
+                                    <span class="timeline-date">[2022 - 2026]</span>
+                                </div>
+                                <div class="timeline-company">@ SRM Valliammai Engineering College, Chennai</div>
+                                <p class="timeline-desc">
+                                    Specializing in Cyber Security, Full-Stack Web Development, Data Structures, OOP, and Software Engineering. Active participant in department expos and hackathons.
+                                </p>
+                                <div class="timeline-tags">
+                                    <span class="tag-sm">[Java]</span>
+                                    <span class="tag-sm">[Cyber Security]</span>
+                                    <span class="tag-sm">[Web Dev]</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Item 3: Certifications & Achievements -->
+                        <div class="timeline-item">
+                            <div class="timeline-marker">[AWARD]</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-role">> Certifications & Key Achievements</span>
+                                    <span class="timeline-date">[2024 - 2025]</span>
+                                </div>
+                                <div class="timeline-company">@ Industry & Department Competitions</div>
+                                <p class="timeline-desc">
+                                    • Certification: Artificial Intelligence and Machine Learning — Infosys Springboard (2025)<br>
+                                    • 2nd Prize — Department Mini Project Expo (Spyware Detection System)<br>
+                                    • 1st Prize — Cybersecurity Meme Challenge
+                                </p>
+                                <div class="timeline-tags">
+                                    <span class="tag-sm">[Infosys Springboard]</span>
+                                    <span class="tag-sm">[2nd Prize Expo]</span>
+                                    <span class="tag-sm">[1st Prize Challenge]</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Item 4: HSC & SSLC -->
+                        <div class="timeline-item">
+                            <div class="timeline-marker">[SCHOOL]</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-role">> HSC & SSLC Education</span>
+                                    <span class="timeline-date">[2020 - 2022]</span>
+                                </div>
+                                <div class="timeline-company">@ ARC Kamatchi & Raj Matriculation Schools</div>
+                                <p class="timeline-desc">
+                                    Higher Secondary Certificate (HSC) 2022 @ ARC Kamatchi Matriculation Higher Secondary School, Mayiladuthurai.<br>
+                                    Secondary School Leaving Certificate (SSLC) 2020 @ Raj Matriculation Higher Secondary School, Mayiladuthurai.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: CONTACT -->
+        <section id="contact" class="terminal-section">
+            <div class="terminal-box">
+                <div class="box-header">
+                    <span class="box-title">~/contact</span>
+                    <span class="box-status">EXEC: ./send_transmission.sh</span>
+                </div>
+                <div class="box-body">
+                    <div class="section-command">
+                        <span class="prompt-user">bharath@terminal</span>:<span class="prompt-path">~/contact</span>$ <span class="cmd-text">./send_transmission.sh --init</span>
+                    </div>
+
+                    <h3 class="section-heading typewriter-target" data-type-text="> INITIATE TRANSMISSION / REACH OUT" data-speed="40">
+                        <span class="typed-text"></span><span class="cursor">█</span>
+                    </h3>
+
+                    <div class="contact-grid">
+                        
+                        <!-- Terminal Form -->
+                        <form id="contact-form" class="terminal-form">
+                            <div class="form-group">
+                                <label for="form-name" class="form-label">
+                                    <span class="prompt-user">guest@terminal</span>:~$ enter --name:
+                                </label>
+                                <input type="text" id="form-name" class="terminal-input" placeholder="[Your Name / Recruiter Name]" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="form-email" class="form-label">
+                                    <span class="prompt-user">guest@terminal</span>:~$ enter --email:
+                                </label>
+                                <input type="email" id="form-email" class="terminal-input" placeholder="[user@domain.com]" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="form-message" class="form-label">
+                                    <span class="prompt-user">guest@terminal</span>:~$ enter --message:
+                                </label>
+                                <textarea id="form-message" class="terminal-textarea" rows="4" placeholder="[Type your transmission message here...]" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-box glow-btn submit-btn" id="submit-btn">
+                                [> SEND_TRANSMISSION]
+                            </button>
+
+                            <div id="form-feedback" class="form-feedback-box" hidden></div>
+                        </form>
+
+                        <!-- Contact Channels & Social Box -->
+                        <div class="contact-info-box">
+                            <h4 class="info-title">> DIRECT ENDPOINTS</h4>
+                            
+                            <div class="endpoint-item">
+                                <span class="ep-label">[EMAIL]</span>
+                                <a href="mailto:bharathjai2005@gmail.com" class="ep-link">bharathjai2005@gmail.com</a>
+                            </div>
+
+                            <div class="endpoint-item">
+                                <span class="ep-label">[PHONE]</span>
+                                <a href="tel:+919489890596" class="ep-link">+91 9489890596</a>
+                            </div>
+
+                            <div class="endpoint-item">
+                                <span class="ep-label">[LOCATION]</span>
+                                <span class="ep-val">Chennai, Tamil Nadu, India</span>
+                            </div>
+
+                            <div class="endpoint-item">
+                                <span class="ep-label">[LANGUAGES]</span>
+                                <span class="ep-val">English, Tamil</span>
+                            </div>
+
+                            <h4 class="info-title" style="margin-top: 1.2rem;">> PROFILES & REPOS</h4>
+                            <div class="social-buttons-grid">
+                                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn-box social-btn">
+                                    [GITHUB]
+                                </a>
+                                <a href="https://leetcode.com" target="_blank" rel="noopener noreferrer" class="btn-box social-btn">
+                                    [LEETCODE]
+                                </a>
+                                <a href="mailto:bharathjai2005@gmail.com" class="btn-box social-btn">
+                                    [EMAIL]
+                                </a>
+                                <a href="tel:9489890596" class="btn-box social-btn">
+                                    [CALL]
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- INTERACTIVE CLI MODAL / DRAWER -->
+    <div id="cli-modal" class="cli-modal" hidden>
+        <div class="cli-modal-content">
+            <div class="cli-modal-header">
+                <span class="cli-modal-title">SYSTEM_TERMINAL v2.4 (TYPE 'help' FOR COMMANDS)</span>
+                <button id="close-cli-btn" class="close-cli-btn" aria-label="Close terminal">[X]</button>
+            </div>
+            <div class="cli-modal-body" id="cli-output-window">
+                <div class="cli-line text-accent">Terminal session initialized. Active Profile: BHARATH JAYAKUMAR</div>
+                <div class="cli-line">Type <span class="text-highlight">'help'</span> to view available system commands.</div>
+            </div>
+            <div class="cli-modal-input-line">
+                <span class="prompt-user">guest@terminal</span>:<span class="prompt-path">~</span>$&nbsp;
+                <input type="text" id="cli-input" class="cli-input-field" autocomplete="off" spellcheck="false" autofocus>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROJECT DETAIL MODAL -->
+    <div id="project-modal" class="project-modal" hidden>
+        <div class="project-modal-content">
+            <div class="box-header">
+                <span class="box-title" id="modal-project-path">~/projects/details</span>
+                <button id="close-project-modal-btn" class="close-cli-btn">[X]</button>
+            </div>
+            <div class="box-body" id="modal-project-body">
+                <!-- Injected via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bottom-footer">
+        <div class="footer-container">
+            <div class="footer-status">
+                <span class="status-indicator"></span> SYS_STATUS: <span class="text-highlight">200 OK</span> | ENCRYPTION: AES-256
+            </div>
+            <div class="footer-copyright">
+                © <span id="current-year">2026</span> BHARATH JAYAKUMAR. ALL RIGHTS RESERVED.
+            </div>
+            <div class="footer-clock" id="live-clock">
+                00:00:00 UTC
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script -->
+    <script src="script.js"></script>
+</body>
+</html>
