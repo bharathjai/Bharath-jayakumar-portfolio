@@ -5,7 +5,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     initBgCanvas();
     initAnimatedBootSequence();
-    init3DAsciiCube();
     initDraggableWindows();
     initWindowControlDots();
     initTypewriterObserver();
@@ -149,91 +148,10 @@ function initAnimatedBootSequence() {
         }, 22);
     }
 
-    setTimeout(typeNextLine, 200);
 }
 
 /* ==========================================================================
-   3. 3D INTERACTIVE SPINNING ASCII WIREFRAME CUBE ENGINE
-   ========================================================================== */
-function init3DAsciiCube() {
-    const pre = document.getElementById('ascii-cube-pre');
-    if (!pre) return;
-
-    let A = 0;
-    let B = 0;
-
-    const width = 44;
-    const height = 20;
-
-    function renderFrame() {
-        let zBuffer = new Array(width * height).fill(0);
-        let buffer = new Array(width * height).fill(' ');
-
-        // Cube coordinates rendering
-        for (let x = -10; x < 10; x += 1.2) {
-            for (let y = -10; y < 10; y += 1.2) {
-                for (let z = -10; z < 10; z += 1.2) {
-                    // Only render points on the outer faces of the cube
-                    if (Math.abs(x) < 9 && Math.abs(y) < 9 && Math.abs(z) < 9) continue;
-
-                    // Rotate 3D points
-                    let cosA = Math.cos(A), sinA = Math.sin(A);
-                    let cosB = Math.cos(B), sinB = Math.sin(B);
-
-                    let x1 = x;
-                    let y1 = y * cosA - z * sinA;
-                    let z1 = y * sinA + z * cosA;
-
-                    let x2 = x1 * cosB + z1 * sinB;
-                    let y2 = y1;
-                    let z2 = -x1 * sinB + z1 * cosB;
-
-                    let distance = 35;
-                    let ooz = 1 / (z2 + distance);
-
-                    let xp = Math.floor(width / 2 + x2 * ooz * 42);
-                    let yp = Math.floor(height / 2 + y2 * ooz * 22);
-
-                    let idx = xp + yp * width;
-
-                    if (xp >= 0 && xp < width && yp >= 0 && yp < height) {
-                        if (ooz > zBuffer[idx]) {
-                            zBuffer[idx] = ooz;
-                            // Luminance chars for retro phosphor shading
-                            const chars = '.,-~:;=!*#$@';
-                            let luminanceIdx = Math.floor((z2 + 10) / 20 * (chars.length - 1));
-                            luminanceIdx = Math.max(0, Math.min(chars.length - 1, luminanceIdx));
-                            buffer[idx] = chars[luminanceIdx];
-                        }
-                    }
-                }
-            }
-        }
-
-        let outputStr = '';
-        for (let i = 0; i < height; i++) {
-            outputStr += buffer.slice(i * width, (i + 1) * width).join('') + '\n';
-        }
-
-        pre.textContent = outputStr;
-        A += 0.03;
-        B += 0.02;
-    }
-
-    let cubeInterval = setInterval(renderFrame, 45);
-
-    // Pause cube animation when tab is invisible
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            clearInterval(cubeInterval);
-        } else {
-            cubeInterval = setInterval(renderFrame, 45);
-        }
-    });
-}
-
-/* ==========================================================================
-   4. DRAGGABLE WINDOW PANELS
+   3. DRAGGABLE WINDOW PANELS
    ========================================================================== */
 function initDraggableWindows() {
     const headers = document.querySelectorAll('.terminal-box .box-header');
