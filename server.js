@@ -115,11 +115,15 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Start Server
-app.listen(PORT, () => {
-    console.log(`\n==================================================`);
-    console.log(`⚡ TERMINAL PORTFOLIO SERVER RUNNING ON PORT ${PORT}`);
-    console.log(`  Local URL: http://localhost:${PORT}`);
-    console.log(`  API Endpoint: http://localhost:${PORT}/api/contact`);
-    console.log(`==================================================\n`);
-});
+// Start Server (only if run directly)
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`\n==================================================`);
+        console.log(`⚡ TERMINAL PORTFOLIO SERVER RUNNING ON PORT ${PORT}`);
+        console.log(`  Local URL: http://localhost:${PORT}`);
+        console.log(`  API Endpoint: http://localhost:${PORT}/api/contact`);
+        console.log(`==================================================\n`);
+    });
+}
+
+module.exports = app;
