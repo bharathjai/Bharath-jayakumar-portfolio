@@ -80,10 +80,10 @@ function initBgCanvas() {
                 const y = drops[i] * fontSize;
 
                 // Random subtle highlight on leading character
-                if (Math.random() > 0.94) {
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.35)'; // Faint tip accent
+                if (Math.random() > 0.95) {
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.2)'; // Faint tip accent
                 } else {
-                    ctx.fillStyle = 'rgba(255, 230, 0, 0.08)'; // Ultra-subtle low opacity neon yellow (0.08)
+                    ctx.fillStyle = 'rgba(255, 230, 0, 0.04)'; // Ultra-subtle low opacity neon yellow (0.04 max)
                 }
 
                 if (y > 0) {
