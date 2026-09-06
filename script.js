@@ -571,8 +571,9 @@ function initInteractiveCLI() {
                 break;
 
             case 'projects':
-                printLine(`FEATURED REPOSITORY & CASE STUDY:`);
-                printLine(`  1. Namma Veetu Anjaraipetti [MERN E-Commerce Platform] (Live: https://nammaveetuanjaraipetti.online)`);
+                printLine(`FEATURED REPOSITORIES & CASE STUDIES:`);
+                printLine(`  1. UChef [AI-Powered Ingredient Detection & FastAPI Backend] (YOLO26 Computer Vision)`);
+                printLine(`  2. Namma Veetu Anjaraipetti [MERN E-Commerce Platform] (Live: https://nammaveetuanjaraipetti.online)`);
                 document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' });
                 break;
 
@@ -651,6 +652,23 @@ function initProjectModals() {
     const projectCards = document.querySelectorAll('.project-card');
 
     const projectData = {
+        'project-uchef': {
+            path: '~/case-study/uchef-ai-detection',
+            title: '[UChef — AI-Powered Ingredient Detection]',
+            description: 'An AI-powered cooking application that uses a custom-trained YOLO26 computer vision model to identify ingredients from images and deliver intelligent cooking experiences.',
+            designProcess: 'Trained a custom YOLO26 object detection model (uchef-yolo26n-v1) initialized from base model yolo26n.pt on Google Colab using Python and Ultralytics YOLO. Built a dedicated FastAPI microservice (services/ingredient-detector/main.py) featuring EXIF orientation correction, max 10MB file validation, and format checking (JPG, PNG, WebP).',
+            features: [
+                'Custom YOLO26 Object Detection Model (`uchef-yolo26n-v1` trained from `yolo26n.pt` to `best.pt` via Google Colab)',
+                'Dedicated FastAPI inference backend service (`services/ingredient-detector/main.py`)',
+                'API Endpoints: GET /health, GET /model-info, POST /api/detect-ingredients',
+                'Image validation & preprocessing (Max 10MB limit, JPG/PNG/WebP format enforcement, EXIF orientation fix)',
+                'Computer vision pipeline delivering structured ingredient predictions for vegetables, fruits, spices, and cooking items',
+                'Full integration of AI detection capabilities into the UChef application'
+            ],
+            tech: ['Python', 'YOLO26', 'Ultralytics', 'FastAPI', 'Computer Vision', 'Machine Learning', 'AI'],
+            githubUrl: 'https://github.com/bharathjai',
+            demoUrl: ''
+        },
         'project-1': {
             path: '~/case-study/namma-veetu-anjaraipetti',
             title: '[Namma Veetu Anjaraipetti — MERN E-Commerce Case Study]',
@@ -731,7 +749,7 @@ function initProjectModals() {
 
                 <div class="hero-actions" style="margin-top: 1rem; gap: 0.8rem; display: flex; flex-wrap: wrap;">
                     <a href="${escapeHTML(data.githubUrl || 'https://github.com/bharathjai')}" target="_blank" rel="noopener noreferrer" class="btn-box glow-btn">[> REPOSITORY_SOURCE]</a>
-                    <a href="${escapeHTML(data.demoUrl || 'https://nammaveetuanjaraipetti.online')}" target="_blank" rel="noopener noreferrer" class="btn-box glow-btn">[> LIVE_DEMO]</a>
+                    ${data.demoUrl ? `<a href="${escapeHTML(data.demoUrl)}" target="_blank" rel="noopener noreferrer" class="btn-box glow-btn">[> LIVE_DEMO]</a>` : ''}
                 </div>
             </div>
         `;
