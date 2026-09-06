@@ -572,8 +572,10 @@ function initInteractiveCLI() {
 
             case 'projects':
                 printLine(`FEATURED REPOSITORIES & CASE STUDIES:`);
-                printLine(`  1. UChef [AI-Powered Ingredient Detection & FastAPI Backend] (YOLO26 Computer Vision)`);
-                printLine(`  2. Namma Veetu Anjaraipetti [MERN E-Commerce Platform] (Live: https://nammaveetuanjaraipetti.online)`);
+                printLine(`  1. Visit Tamil Nadu [Full-Stack Tourism & Booking Platform] (Live: https://visittamilnadu.vercel.app)`);
+                printLine(`  2. Shopping Wears [Men's Clothing E-Commerce & Razorpay] (Live: https://shopping-wears.onrender.com/)`);
+                printLine(`  3. UChef [AI-Powered Ingredient Detection & FastAPI Backend] (YOLO26 Computer Vision)`);
+                printLine(`  4. Namma Veetu Anjaraipetti [MERN E-Commerce Platform] (Live: https://nammaveetuanjaraipetti.online)`);
                 document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' });
                 break;
 
@@ -652,6 +654,36 @@ function initProjectModals() {
     const projectCards = document.querySelectorAll('.project-card');
 
     const projectData = {
+        'project-visittamilnadu': {
+            path: '~/case-study/visit-tamil-nadu',
+            title: '[Visit Tamil Nadu — Tourism & Booking Platform]',
+            description: 'Full-stack web application for Tamil Nadu Tourism offering interactive destination guides, curated tour itineraries, cultural experiences, hotel reservations, and travel bookings.',
+            designProcess: 'Engineered dynamic package selection, interactive destination maps, hotel booking flows, and rich visual presentation showcasing Tamil Nadu\'s temples, hill stations, and heritage landmarks.',
+            features: [
+                'Interactive destination explorer & curated Tamil Nadu travel itineraries',
+                'Hotel & tour package booking workflow with instant reservation confirmations',
+                'Integrated transport recommendations, cultural guide contacts, and regional highlights',
+                'Responsive full-stack architecture built with React, Next.js, and Node.js deployed on Vercel'
+            ],
+            tech: ['React', 'Next.js', 'Node.js', 'Express', 'Tailwind CSS', 'Vercel'],
+            githubUrl: 'https://github.com/bharathjai',
+            demoUrl: 'https://visittamilnadu.vercel.app'
+        },
+        'project-shoppingwears': {
+            path: '~/case-study/shopping-wears',
+            title: '[Shopping Wears — Men\'s Clothing E-Commerce]',
+            description: 'Full-stack E-Commerce web application for men\'s fashion and apparel featuring automated order workflows, secure payment processing, user authentication, and admin inventory management.',
+            designProcess: 'Architected a modern e-commerce storefront utilizing Supabase Row-Level Security (RLS), custom Tailwind CSS UI, and Razorpay API integration for end-to-end transaction security.',
+            features: [
+                'Customer shopping portal with product filtering, cart, wishlist, and user account profiles',
+                'Supabase Backend (Auth, Storage, PostgreSQL Database, and RLS policies)',
+                'Razorpay online payment gateway integration for seamless transaction checkout',
+                'Admin management portal for inventory control, order tracking, and product updates'
+            ],
+            tech: ['React', 'Vite', 'Tailwind CSS', 'Supabase', 'Razorpay', 'PostgreSQL'],
+            githubUrl: 'https://github.com/bharathjai',
+            demoUrl: 'https://shopping-wears.onrender.com/'
+        },
         'project-uchef': {
             path: '~/case-study/uchef-ai-detection',
             title: '[UChef — AI-Powered Ingredient Detection]',
