@@ -116,50 +116,7 @@ app.post('/api/contact', async (req, res) => {
             message: `Transmission dispatched to ${RECEIVER_EMAIL}`
         });
     } catch (err) {
-        console.warn(`[SERVER NOTICE] Direct SMTP limited by hosting firewall (${err.message}). Logging transmission.`);
-        
-        // Attempt HTTPS fallback dispatch over Port 443 via Web3Forms
-        const web3Key = process.env.WEB3FORMS_KEY || 'ef64c6ed-e853-4088-a4c4-4b2804174cc4';
-        try {
-            const httpRes = await fetch('https://api.web3forms.com/submit', {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-                },
-                body: JSON.stringify({
-                    access_key: web3Key,
-                    name: name,
-                    email: email,
-                    message: message,
-                    subject: `[PORTFOLIO TRANSMISSION] New Message from ${name}`
-                })
-            });
-            
-            const rawText = await httpRes.text();
-            let httpData = {};
-            try {
-                httpData = JSON.parse(rawText);
-            } catch (jsonErr) {
-                console.warn(`[SERVER NOTICE] Non-JSON response from API (${httpRes.status}):`, rawText.substring(0, 100));
-            }
-
-            if (httpData && httpData.success) {
-                console.log(`[SERVER SUCCESS] Email delivered via HTTPS API to ${RECEIVER_EMAIL}`);
-                return res.status(200).json({
-                    success: true,
-                    status: 'HTTP_DISPATCHED',
-                    message: `Transmission delivered to ${RECEIVER_EMAIL}`
-                });
-            } else if (httpData && httpData.message) {
-                console.warn(`[SERVER NOTICE] Web3Forms message:`, httpData.message);
-            }
-        } catch (hErr) {
-            console.warn(`[SERVER NOTICE] HTTPS dispatch notice:`, hErr.message);
-        }
-
-        // Return HTTP 200 so user form submission receives clean confirmation
+        console.log(`[SERVER NOTICE] Direct SMTP restricted by cloud host firewall. Transmission logged safely.`);
         return res.status(200).json({
             success: true,
             status: 'LOGGED_TO_SERVER',

@@ -870,8 +870,36 @@ function initContactForm() {
 
             if (serverResponse.ok) {
                 const serverResult = await serverResponse.json();
-                feedback.innerHTML += `<div class="text-accent">> STATUS: 200 OK — TRANSMISSION RECEIVED & PROCESSED BY SERVER API!</div>`;
-                feedback.innerHTML += `<div class="text-accent">> Thank you ${escapeHTML(name)}. Your message has been sent to ${targetEmail}.</div>`;
+                
+                // If SMTP directly sent from server:
+                if (serverResult.status === 'SMTP_SENT') {
+                    feedback.innerHTML += `<div class="text-accent">> STATUS: 200 OK — TRANSMISSION DELIVERED TO GMAIL INBOX (${targetEmail})!</div>`;
+                    feedback.innerHTML += `<div class="text-accent">> Thank you ${escapeHTML(name)}. I will respond shortly.</div>`;
+                    form.reset();
+                    return;
+                }
+
+                // If logged on server, trigger client-side Web3Forms dispatch from user's browser (passes Cloudflare 100%)
+                try {
+                    const formData = new FormData(form);
+                    const web3Response = await fetch('https://api.web3forms.com/submit', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const web3Result = await web3Response.json();
+
+                    if (web3Result.success) {
+                        feedback.innerHTML += `<div class="text-accent">> STATUS: 200 OK — TRANSMISSION DELIVERED DIRECTLY TO GMAIL INBOX (${targetEmail})!</div>`;
+                        feedback.innerHTML += `<div class="text-accent">> Thank you ${escapeHTML(name)}. I will respond shortly.</div>`;
+                        form.reset();
+                        return;
+                    }
+                } catch (wErr) {
+                    // Ignore client Web3Forms error and show server log confirmation
+                }
+
+                feedback.innerHTML += `<div class="text-accent">> STATUS: 200 OK — TRANSMISSION RECEIVED & LOGGED BY SERVER API!</div>`;
+                feedback.innerHTML += `<div class="text-accent">> Thank you ${escapeHTML(name)}. Your transmission has been recorded.</div>`;
                 form.reset();
                 return;
             }
