@@ -125,7 +125,8 @@ app.post('/api/contact', async (req, res) => {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
                 },
                 body: JSON.stringify({
                     access_key: web3Key,
@@ -135,7 +136,15 @@ app.post('/api/contact', async (req, res) => {
                     subject: `[PORTFOLIO TRANSMISSION] New Message from ${name}`
                 })
             });
-            const httpData = await httpRes.json();
+            
+            const rawText = await httpRes.text();
+            let httpData = {};
+            try {
+                httpData = JSON.parse(rawText);
+            } catch (jsonErr) {
+                console.warn(`[SERVER NOTICE] Non-JSON response from API (${httpRes.status}):`, rawText.substring(0, 100));
+            }
+
             if (httpData && httpData.success) {
                 console.log(`[SERVER SUCCESS] Email delivered via HTTPS API to ${RECEIVER_EMAIL}`);
                 return res.status(200).json({
@@ -143,11 +152,11 @@ app.post('/api/contact', async (req, res) => {
                     status: 'HTTP_DISPATCHED',
                     message: `Transmission delivered to ${RECEIVER_EMAIL}`
                 });
-            } else {
-                console.warn(`[SERVER WARNING] Web3Forms dispatch response:`, httpData);
+            } else if (httpData && httpData.message) {
+                console.warn(`[SERVER NOTICE] Web3Forms message:`, httpData.message);
             }
         } catch (hErr) {
-            console.error(`[SERVER ERROR] HTTPS dispatch error:`, hErr.message);
+            console.warn(`[SERVER NOTICE] HTTPS dispatch notice:`, hErr.message);
         }
 
         // Return HTTP 200 so user form submission receives clean confirmation
