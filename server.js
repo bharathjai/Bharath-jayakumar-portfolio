@@ -118,32 +118,36 @@ app.post('/api/contact', async (req, res) => {
     } catch (err) {
         console.warn(`[SERVER NOTICE] Direct SMTP limited by hosting firewall (${err.message}). Logging transmission.`);
         
-        // Attempt HTTPS fallback dispatch over Port 443 if WEB3FORMS_KEY is defined
-        if (process.env.WEB3FORMS_KEY) {
-            try {
-                const httpRes = await fetch('https://api.web3forms.com/submit', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        access_key: process.env.WEB3FORMS_KEY,
-                        name: name,
-                        email: email,
-                        message: message,
-                        subject: `[PORTFOLIO TRANSMISSION] New Message from ${name}`
-                    })
+        // Attempt HTTPS fallback dispatch over Port 443 via Web3Forms
+        const web3Key = process.env.WEB3FORMS_KEY || 'ef64c6ed-e853-4088-a4c4-4b2804174cc4';
+        try {
+            const httpRes = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    access_key: web3Key,
+                    name: name,
+                    email: email,
+                    message: message,
+                    subject: `[PORTFOLIO TRANSMISSION] New Message from ${name}`
+                })
+            });
+            const httpData = await httpRes.json();
+            if (httpData && httpData.success) {
+                console.log(`[SERVER SUCCESS] Email delivered via HTTPS API to ${RECEIVER_EMAIL}`);
+                return res.status(200).json({
+                    success: true,
+                    status: 'HTTP_DISPATCHED',
+                    message: `Transmission delivered to ${RECEIVER_EMAIL}`
                 });
-                const httpData = await httpRes.json();
-                if (httpData && httpData.success) {
-                    console.log(`[SERVER SUCCESS] Email delivered via HTTPS API to ${RECEIVER_EMAIL}`);
-                    return res.status(200).json({
-                        success: true,
-                        status: 'HTTP_DISPATCHED',
-                        message: `Transmission delivered to ${RECEIVER_EMAIL}`
-                    });
-                }
-            } catch (hErr) {
-                // Ignore fallback error
+            } else {
+                console.warn(`[SERVER WARNING] Web3Forms dispatch response:`, httpData);
             }
+        } catch (hErr) {
+            console.error(`[SERVER ERROR] HTTPS dispatch error:`, hErr.message);
         }
 
         // Return HTTP 200 so user form submission receives clean confirmation
